@@ -7,7 +7,9 @@ export function PlayerName(props: { player: PlayerMeta }): JSX.Element {
 
     return (
         <td className="player-name">
-            <a href={`https://blaseball.com/player/${id}`}>{name}</a>
+            <a target="_blank" href={`https://blaseball.com/player/${id}`}>
+                {name}
+            </a>
         </td>
     );
 }
