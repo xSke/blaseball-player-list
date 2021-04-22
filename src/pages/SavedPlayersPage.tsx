@@ -5,9 +5,9 @@ import { useAppSelector } from "../hooks";
 
 function SavedPlayersPage(): JSX.Element {
     const data = useLeagueData();
-    if (!data) return <span>Loading...</span>;
-
     const playerIds = useAppSelector((state) => state.savedPlayers.players);
+
+    if (!data) return <span>Loading...</span>;
     const players = playerIds.map((id) => data.players[id]);
 
     return (

@@ -20,7 +20,9 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
         ? getCombinedStars
         : getCombinedFakeStars;
 
-    return [
+    const cols = options.columns;
+
+    const groups: ColumnGroup[] = [
         {
             name: "Info",
             columns: [
@@ -35,12 +37,14 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                     name: "Team",
                     render: PlayerTeam,
                     sortKey: (_, meta) => meta.mainTeam?.teamId ?? "",
+                    hidden: !cols.team,
                 },
                 {
                     id: "position",
                     name: "Position",
                     render: PlayerPosition,
                     sortKey: (_, meta) => getPositionSortKey(meta),
+                    hidden: !cols.position,
                 },
                 {
                     id: "combinedStars",
@@ -51,33 +55,48 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                 },
             ],
         },
-        ...(options.showAdvancedStats
-            ? advancedStats(options)
-            : basicStars(options)),
+        {
+            name: "Stars",
+            columns: [
+                basicStar(battingAttributes, options, !cols.batting),
+                basicStar(pitchingAttributes, options, !cols.pitching),
+                basicStar(baserunningAttributes, options, !cols.baserunning),
+                basicStar(defenseAttributes, options, !cols.defense),
+            ],
+            hidden: options.showAdvancedStats,
+        },
+        ...advancedStats(options),
         {
             name: "Misc",
             columns: [
-                statAttr(pressurization),
-                statAttr(cinnamon),
                 {
                     id: "soul",
                     name: "Soul",
                     sortKey: (p) => p.soul,
-                    render: ({ player }) => <td>{player.player.soul}</td>,
+                    render: ({ player }) => (
+                        <td className="numeric-stat">{player.player.soul}</td>
+                    ),
+                    hidden: !options.columns.misc,
                 },
                 {
                     id: "fate",
                     name: "Fate",
                     sortKey: (p) => p.fate,
-                    render: ({ player }) => <td>{player.player.fate}</td>,
+                    render: ({ player }) => (
+                        <td className="numeric-stat">{player.player.fate}</td>
+                    ),
+                    hidden: !options.columns.misc,
                 },
                 {
                     id: "fingers",
                     name: "Fingers",
                     sortKey: (p) => p.totalFingers,
                     render: ({ player }) => (
-                        <td>{player.player.totalFingers}</td>
+                        <td className="numeric-stat">
+                            {player.player.totalFingers}
+                        </td>
                     ),
+                    hidden: !options.columns.misc,
                 },
                 {
                     id: "eDensity",
@@ -85,38 +104,46 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                     alt: "eDensity",
                     sortKey: (p) => p.eDensity ?? null,
                     render: ({ player }) => (
-                        <td>
+                        <td className="numeric-stat">
                             {player.player.eDensity
                                 ? player.player.eDensity.toFixed(2)
                                 : "-"}
                         </td>
                     ),
+                    hidden: !options.columns.misc,
                 },
             ],
         },
     ];
+
+    return groups
+        .map((g) => ({ ...g, columns: g.columns.filter((c) => !c.hidden) }))
+        .filter((g) => !g.hidden && g.columns.length > 0);
 }
 
 function advancedStats(options: TableOptionsSlice): ColumnGroup[] {
-    const groups = [];
-    if (options.columns.batting)
-        groups.push(statCategoryGroup(battingAttributes, options));
-
-    if (options.columns.pitching)
-        groups.push(statCategoryGroup(pitchingAttributes, options));
-
-    if (options.columns.baserunning)
-        groups.push(statCategoryGroup(baserunningAttributes, options));
-
-    if (options.columns.defense)
-        groups.push(statCategoryGroup(defenseAttributes, options));
-
-    return groups;
+    if (!options.showAdvancedStats) return [];
+    const cols = options.columns;
+    return [
+        statCategoryGroup(battingAttributes, options, !cols.batting),
+        statCategoryGroup(pitchingAttributes, options, !cols.pitching),
+        statCategoryGroup(baserunningAttributes, options, !cols.baserunning),
+        statCategoryGroup(defenseAttributes, options, !cols.defense),
+        {
+            name: "Vibes",
+            columns: [
+                statAttr(pressurization, !options.columns.vibestats),
+                statAttr(cinnamon, !options.columns.vibestats),
+            ],
+            hidden: !cols.vibestats,
+        },
+    ];
 }
 
 function statCategoryGroup(
     category: Category,
-    options: TableOptionsSlice
+    options: TableOptionsSlice,
+    hidden: boolean
 ): ColumnGroup {
     const starGetter = options.useRealStars
         ? category.stars
@@ -132,36 +159,28 @@ function statCategoryGroup(
                 sortKey: starGetter,
                 render: numericStat(starGetter, starTiers),
             },
-            ...category.attrs.map(statAttr),
+            ...category.attrs.map((a) => statAttr(a)),
         ],
+        hidden,
     };
 }
 
-function statAttr(attr: Attribute): Column {
+function statAttr(attr: Attribute, hidden = false): Column {
     return {
         id: attr.shortName,
         name: attr.shortName,
         alt: attr.name,
         sortKey: attr.accessor,
         render: numericStat(attr.accessor, attrTiers, attr.inverse),
+        hidden,
     };
 }
 
-function basicStars(options: TableOptionsSlice): ColumnGroup[] {
-    return [
-        {
-            name: "Stars",
-            columns: [
-                basicStar(battingAttributes, options),
-                basicStar(pitchingAttributes, options),
-                basicStar(baserunningAttributes, options),
-                basicStar(defenseAttributes, options),
-            ],
-        },
-    ];
-}
-
-function basicStar(category: Category, options: TableOptionsSlice) {
+function basicStar(
+    category: Category,
+    options: TableOptionsSlice,
+    hidden: boolean
+) {
     const starGetter = options.useRealStars
         ? category.stars
         : category.fakeStars;
@@ -172,12 +191,14 @@ function basicStar(category: Category, options: TableOptionsSlice) {
         alt: `${category.name} Stars`,
         sortKey: starGetter,
         render: numericStat(starGetter, starTiers),
+        hidden,
     };
 }
 
 export interface ColumnGroup {
     name: string;
     columns: Column[];
+    hidden?: boolean;
 }
 
 export interface CellProps {
@@ -189,6 +210,7 @@ export interface Column {
     id: string;
     name: string;
     alt?: string;
+    hidden?: boolean;
     sortKey?: (
         player: BlaseballPlayer,
         meta: PlayerMeta

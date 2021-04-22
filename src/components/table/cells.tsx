@@ -49,5 +49,9 @@ export function PlayerPosition(props: { player: PlayerMeta }): JSX.Element {
     }
     const { mainTeam } = props.player;
     const position = getPositionName(props.player, mainTeam);
-    return position ? <td>{position}</td> : <td className="invalid">-</td>;
+    return position ? (
+        <td className="player-position">{position}</td>
+    ) : (
+        <td className="player-position invalid">-</td>
+    );
 }

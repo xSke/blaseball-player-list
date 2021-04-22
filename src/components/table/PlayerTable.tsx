@@ -73,7 +73,7 @@ function TableColgroups(props: { columns: ColumnGroup[] }) {
         <>
             {props.columns.map((cg, i) => (
                 <colgroup
-                    key={i}
+                    key={cg.name}
                     // Make the first group a bit longer to handle the checkbox
                     span={cg.columns.length + (i === 0 ? 1 : 0)}
                 />
@@ -179,7 +179,7 @@ function SaveCheckbox(props: { id: string }) {
     const checked = players.includes(props.id);
 
     return (
-        <td>
+        <td className="selectbox">
             <input
                 className="form-check-input"
                 type="checkbox"

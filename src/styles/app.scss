@@ -3,6 +3,7 @@ html, body, .app {
 }
 
 .player-table {
+    width: auto;
     border-top: 1px solid #e3e3e3;
     font-size: 14px;
 
@@ -26,6 +27,10 @@ html, body, .app {
         &.invalid {
             text-align: center;
         }
+
+        &.selectbox {
+            padding: 0.25em;
+        }
         // padding: 2px;
     }
 }
@@ -39,6 +44,11 @@ html, body, .app {
 
 .player-team {
     white-space: nowrap;
+}
+
+.player-position {
+    white-space: nowrap; 
+    text-align: center;
 }
 
 .numeric-stat-baserunning:first-of-type {

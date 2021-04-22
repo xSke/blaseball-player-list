@@ -1,6 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type ListColumn = "batting" | "pitching" | "baserunning" | "defense";
+export type ListColumn =
+    | "team"
+    | "position"
+    | "batting"
+    | "pitching"
+    | "baserunning"
+    | "defense"
+    | "vibestats"
+    | "misc";
 
 export interface TableOptionsSlice {
     columns: Record<ListColumn, boolean>;
@@ -10,10 +18,14 @@ export interface TableOptionsSlice {
 
 const initialState = {
     columns: {
+        team: true,
+        position: true,
         batting: true,
         pitching: true,
         baserunning: true,
         defense: true,
+        vibestats: true,
+        misc: true,
     },
     useRealStars: true,
     showAdvancedStats: true,
