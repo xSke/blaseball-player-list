@@ -151,3 +151,36 @@ export function getPlayerMeta(
         mainTeamData: mainTeam ? teams[mainTeam.teamId] : null,
     };
 }
+
+export const bloodTypes = [
+    "A",
+    "AAA",
+    "AA",
+    "Acidic",
+    "Basic",
+    "O",
+    "O No",
+    "H₂O",
+    "Electric",
+    "Love",
+    "Fire",
+    "Psychic",
+    "Grass",
+];
+
+export const coffeeStyles = [
+    "Black",
+    "Light & Sweet",
+    "Macchiato",
+    "Cream & Sugar",
+    "Cold Brew",
+    "Flat White",
+    "Americano",
+    "Coffee?",
+    "Heavy Foam",
+    "Latte",
+    "Decaf",
+    "Milk Substitute",
+    "Plenty of Sugar",
+    "Anything",
+];

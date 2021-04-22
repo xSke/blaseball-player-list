@@ -63,6 +63,8 @@ export interface BlaseballPlayer {
     peanutAllergy: boolean;
     eDensity: number;
 
+    blood: number;
+    coffee: number;
     ritual: string;
 }
 

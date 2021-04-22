@@ -9,7 +9,12 @@ import {
     pressurization,
 } from "../../attributes";
 import { TableOptionsSlice } from "../../store/tableOptionsSlice";
-import { getCombinedFakeStars, getCombinedStars } from "../../players";
+import {
+    bloodTypes,
+    coffeeStyles,
+    getCombinedFakeStars,
+    getCombinedStars,
+} from "../../players";
 import { BlaseballPlayer, PlayerMeta } from "../../types";
 import { positionSortKey as getPositionSortKey } from "../../utils";
 import { PlayerName, PlayerPosition, PlayerTeam } from "./cells";
@@ -52,12 +57,21 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                     alt: "Combined Stars",
                     render: numericStat(combinedStarGetter, combinedStarTiers),
                     sortKey: combinedStarGetter,
+                    hidden: !options.showAdvancedStats,
                 },
             ],
         },
         {
             name: "Stars",
             columns: [
+                {
+                    id: "combinedStars",
+                    name: "🌟",
+                    alt: "Combined Stars",
+                    render: numericStat(combinedStarGetter, combinedStarTiers),
+                    sortKey: combinedStarGetter,
+                    hidden: options.showAdvancedStats,
+                },
                 basicStar(battingAttributes, options, !cols.batting),
                 basicStar(pitchingAttributes, options, !cols.pitching),
                 basicStar(baserunningAttributes, options, !cols.baserunning),
@@ -72,6 +86,7 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                 {
                     id: "soul",
                     name: "Soul",
+                    alt: "Soul",
                     sortKey: (p) => p.soul,
                     render: ({ player }) => (
                         <td className="numeric-stat">{player.player.soul}</td>
@@ -81,7 +96,8 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                 {
                     id: "fate",
                     name: "Fate",
-                    sortKey: (p) => p.fate,
+                    alt: "Fate",
+                    sortKey: (p) => p.fate ?? -1,
                     render: ({ player }) => (
                         <td className="numeric-stat">{player.player.fate}</td>
                     ),
@@ -90,11 +106,22 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                 {
                     id: "fingers",
                     name: "Fingers",
+                    alt: "Number of fingers",
                     sortKey: (p) => p.totalFingers,
                     render: ({ player }) => (
                         <td className="numeric-stat">
                             {player.player.totalFingers}
                         </td>
+                    ),
+                    hidden: !options.columns.misc,
+                },
+                {
+                    id: "allergy",
+                    name: "Allergy",
+                    alt: "Peanut Allergy",
+                    sortKey: (p) => (p.peanutAllergy ? 1 : 0),
+                    render: ({ player }) => (
+                        <td>{player.player.peanutAllergy ? "🤢" : "😋"}</td>
                     ),
                     hidden: !options.columns.misc,
                 },
@@ -111,6 +138,42 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                         </td>
                     ),
                     hidden: !options.columns.misc,
+                },
+            ],
+        },
+        {
+            name: "Interviews",
+            hidden: true, // i'll probably add this in some day
+            columns: [
+                {
+                    id: "blood",
+                    name: "Blood",
+                    sortKey: (p) => p.blood ?? -1,
+                    render: ({ player }) => (
+                        <td className="player-blood">
+                            {bloodTypes[player.player.blood] ?? "Blood?"}
+                        </td>
+                    ),
+                },
+                {
+                    id: "coffee",
+                    name: "Coffee",
+                    sortKey: (p) => p.coffee ?? -1,
+                    render: ({ player }) => (
+                        <td className="player-coffee">
+                            {coffeeStyles[player.player.coffee] ?? "Coffee?"}
+                        </td>
+                    ),
+                },
+                {
+                    id: "ritual",
+                    name: "Ritual",
+                    sortKey: (p) => p.ritual ?? null,
+                    render: ({ player }) => (
+                        <td className="player-ritual">
+                            {player.player.ritual}
+                        </td>
+                    ),
                 },
             ],
         },
