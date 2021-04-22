@@ -1,0 +1,97 @@
+html, body, .app {
+    height: 100%;
+}
+
+.player-table {
+    border-top: 1px solid #e3e3e3;
+    font-size: 14px;
+
+    th {
+        white-space: nowrap;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    colgroup:not(:last-of-type) {
+        border-right: 2px solid #444;
+    }
+
+    td {
+        padding: 0.25em 0.5em;
+
+        &.numeric-stat { 
+            padding: 0.25em 0.35em;   
+        }
+        // padding: 2px;
+    }
+}
+
+.player-name {
+    font-weight: 600;
+    white-space: nowrap;
+    // text-decoration: underline;
+    // color: black;
+}
+
+.player-team {
+    white-space: nowrap;
+}
+
+.numeric-stat-baserunning:first-of-type {
+    border-left: 2px solid #000;
+}
+
+.numeric-stat {
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+
+    &.numeric-stat-0 {
+        background-color: rgba(255, 72, 87, 0.5);
+    }
+
+    &.numeric-stat-1 {
+        background-color: rgba(255, 102, 91, 0.5);
+    }
+
+    &.numeric-stat-2 {
+        background-color: rgba(255, 218, 193, 0.5);
+    }
+
+    &.numeric-stat-3 {
+        background-color: rgba(226, 240, 203, 0.5);
+    }
+
+    &.numeric-stat-4 {
+        background-color: rgba(152, 238, 157, 0.5);
+    }
+
+    &.numeric-stat-5 {
+        background-color: rgba(116, 216, 180, 0.5);
+    }
+}
+
+.sidebar {
+    padding: 0;
+    border-right: 1px solid #ddd;
+    // box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-section {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.main {
+    padding-top: 1rem;
+}
+
+.emoji {
+    display: inline-block;
+    // margin-left: -0.25em;
+    width: 2em;
+    text-align: center;
+}
+
+.player-group {
+    margin-bottom: 1rem;
+}
