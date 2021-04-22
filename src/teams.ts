@@ -1,5 +1,7 @@
 import { BlaseballTeam } from "./types";
 
+export type TeamType = "league" | "coffee" | "special" | "deprecated";
+
 export const ilbTeamIds = [
     "105bc3ff-1320-4e37-8ef0-8d595cb95dd0",
     "23e4cbc1-e9cd-47fa-a35b-bfa06f726cb7",
@@ -48,10 +50,21 @@ export const specialTeamIds = [
     "3b0a289b-aebd-493c-bc11-96793e7216d5",
     "7fcb63bc-11f2-40b9-b465-f1d458692a63",
     "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
+    "40b9ec2a-cb43-4dbb-b836-5accb62e7c20",
 ];
 
 export function sortTeams(teams: BlaseballTeam[]): BlaseballTeam[] {
     return [...teams].sort((a, b) => {
         return a.nickname.localeCompare(b.nickname);
     });
+}
+
+export function getTeamType(teamId: string): TeamType | null {
+    // PODS is deprecated but still in the special list so
+    if (teamId == "40b9ec2a-cb43-4dbb-b836-5accb62e7c20") return "deprecated";
+
+    if (ilbTeamIds.includes(teamId)) return "league";
+    if (coffeeTeamIds.includes(teamId)) return "coffee";
+    if (specialTeamIds.includes(teamId)) return "special";
+    return null;
 }

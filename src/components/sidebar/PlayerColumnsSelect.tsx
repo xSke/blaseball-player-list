@@ -1,60 +1,45 @@
 import React, { ReactNode } from "react";
+import { ListColumn, setColumn } from "../../store/tableOptionsSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import CheckboxOption from "../CheckboxOption";
 
-export type ListColumn = "batting" | "pitching" | "baserunning" | "defense";
-
-export function PlayerColumnsSelect(props: {
-    columns: ListColumn[];
-    setColumns: (columns: ListColumn[]) => void;
-}): JSX.Element {
+export function PlayerColumnsSelect(): JSX.Element {
     return (
-        <div className="sidebar-section">
-            <div className="form-label">Columns</div>
-            <ColumnCheckboxOption id="show-batting" column="batting" {...props}>
+        <div>
+            <div className="form-label">Show columns</div>
+            <ColumnCheckbox id="show-batting" column="batting">
                 Batting
-            </ColumnCheckboxOption>
+            </ColumnCheckbox>
 
-            <ColumnCheckboxOption
-                id="show-pitching"
-                column="pitching"
-                {...props}
-            >
+            <ColumnCheckbox id="show-pitching" column="pitching">
                 Pitching
-            </ColumnCheckboxOption>
+            </ColumnCheckbox>
 
-            <ColumnCheckboxOption
-                id="show-baserunning"
-                column="baserunning"
-                {...props}
-            >
+            <ColumnCheckbox id="show-baserunning" column="baserunning">
                 Baserunning
-            </ColumnCheckboxOption>
+            </ColumnCheckbox>
 
-            <ColumnCheckboxOption id="show-defense" column="defense" {...props}>
+            <ColumnCheckbox id="show-defense" column="defense">
                 Defense
-            </ColumnCheckboxOption>
+            </ColumnCheckbox>
         </div>
     );
 }
 
-function ColumnCheckboxOption(props: {
+function ColumnCheckbox(props: {
     id: string;
     column: ListColumn;
-    columns: ListColumn[];
-    setColumns: (columns: ListColumn[]) => void;
     children?: ReactNode;
 }) {
-    const checked = props.columns.includes(props.column);
+    const dispatch = useAppDispatch();
+    const columns = useAppSelector((state) => state.tableOptions.columns);
+
     return (
         <CheckboxOption
             id={props.id}
-            value={checked}
-            setValue={(val) => {
-                if (val) props.setColumns([...props.columns, props.column]);
-                else
-                    props.setColumns(
-                        props.columns.filter((col) => col !== props.column)
-                    );
+            value={columns[props.column]}
+            setValue={(value) => {
+                dispatch(setColumn({ column: props.column, value }));
             }}
         >
             {props.children}

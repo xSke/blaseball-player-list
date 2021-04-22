@@ -1,107 +1,106 @@
-import React, { Dispatch, SetStateAction } from "react";
-import Select from "react-select";
-import { useAllModifiers } from "../../hooks";
+import React from "react";
+import {
+    setMods,
+    setPositions,
+    setSearch,
+    setTeams,
+} from "../../store/playerFilterSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import ModifierSelect from "./ModifierSelect";
 import { TeamSelect } from "./TeamSelect";
+import Select from "react-select";
 
-export interface PlayerFilters {
-    search: string;
-    modifiers: string[];
-    positions: string[];
-    teams: string[];
-}
-
-export interface PlayerFilterSelectProps {
-    filters: PlayerFilters;
-    setFilters: Dispatch<SetStateAction<PlayerFilters>>;
-}
-
-function PlayerFilterSelect(props: PlayerFilterSelectProps): JSX.Element {
-    const mods = useAllModifiers();
-
+function PlayerFilterSelect(): JSX.Element {
     return (
         <div className="sidebar-section">
-            <div className="mb-3">
-                <label htmlFor="player-name-search" className="form-label">
-                    Search
-                </label>
-                <Search {...props} />
-            </div>
-
-            <div className="mb-3">
-                <label htmlFor="player-name-search" className="form-label">
-                    Modification
-                </label>
-                <ModifierSelect
-                    id={"player-mods"}
-                    selected={props.filters.modifiers}
-                    setSelected={(modifiers) => {
-                        props.setFilters((old) => ({ ...old, modifiers }));
-                    }}
-                    mods={Object.values(mods)}
-                />
-            </div>
-
-            <div className="mb-3">
-                <label htmlFor="player-mods" className="form-label">
-                    Position
-                </label>
-                <PositionSelect {...props} />
-            </div>
-
-            <div className="mb-3">
-                <label htmlFor="player-team" className="form-label">
-                    Team
-                </label>
-                <TeamSelect
-                    id="player-team"
-                    multi={true}
-                    teams={props.filters.teams}
-                    setTeams={(teams) =>
-                        props.setFilters((filters) => ({ ...filters, teams }))
-                    }
-                />
-            </div>
+            <Search />
+            <ModifierFilter />
+            <PositionFilter />
+            <TeamFilter />
         </div>
     );
 }
 
-function Search(props: PlayerFilterSelectProps) {
+function Search() {
+    const dispatch = useAppDispatch();
+    const search = useAppSelector((state) => state.playerFilter.search);
+
     return (
-        <input
-            id="player-name-search"
-            type="text"
-            className="form-control"
-            value={props.filters.search}
-            onChange={(e) =>
-                props.setFilters((old) => ({
-                    ...old,
-                    search: e.target.value,
-                }))
-            }
-            placeholder="Search by name..."
-        />
+        <div className="mb-3">
+            <label htmlFor="player-name-search" className="form-label">
+                Search
+            </label>
+            <input
+                id="player-name-search"
+                type="text"
+                className="form-control"
+                value={search}
+                onChange={(e) => dispatch(setSearch(e.target.value))}
+                placeholder="Search by name..."
+            />
+        </div>
     );
 }
 
-function PositionSelect(props: PlayerFilterSelectProps) {
+function TeamFilter() {
+    const dispatch = useAppDispatch();
+    const selected = useAppSelector((state) => state.playerFilter.teams);
+
     return (
-        <Select
-            isMulti
-            options={[
-                { value: "lineup", label: "Lineup" },
-                { value: "rotation", label: "Rotation" },
-                { value: "bullpen", label: "Bullpen" },
-                { value: "bench", label: "Bench" },
-            ]}
-            onChange={(newItems) => {
-                const positions = newItems.map((item) => item.value);
-                props.setFilters((old) => ({
-                    ...old,
-                    positions,
-                }));
-            }}
-        />
+        <div className="mb-3">
+            <label htmlFor="player-team" className="form-label">
+                Team
+            </label>
+            <TeamSelect
+                id="player-team"
+                multi={true}
+                teams={selected}
+                setTeams={(teams) => dispatch(setTeams(teams))}
+            />
+        </div>
+    );
+}
+
+function PositionFilter() {
+    const dispatch = useAppDispatch();
+
+    return (
+        <div className="mb-3">
+            <label htmlFor="player-position" className="form-label">
+                Position
+            </label>
+            <Select
+                id="player-position"
+                isMulti
+                options={[
+                    { value: "lineup", label: "Lineup" },
+                    { value: "rotation", label: "Rotation" },
+                    { value: "shadows", label: "Shadows" },
+                ]}
+                onChange={(newItems) => {
+                    const positions = newItems.map((item) => item.value);
+                    dispatch(setPositions(positions));
+                }}
+            />
+        </div>
+    );
+}
+
+function ModifierFilter() {
+    const dispatch = useAppDispatch();
+    const selected = useAppSelector((state) => state.playerFilter.mods);
+
+    return (
+        <div className="mb-3">
+            <label htmlFor="player-mods" className="form-label">
+                Modification
+            </label>
+            <ModifierSelect
+                id="player-mods"
+                mods={selected}
+                setMods={(newMods) => dispatch(setMods(newMods))}
+            />
+        </div>
     );
 }
 

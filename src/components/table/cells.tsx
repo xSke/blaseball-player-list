@@ -1,4 +1,4 @@
-import { PlayerMeta, PlayerTeamMapping } from "../../types";
+import { PlayerMeta, RosterEntry } from "../../types";
 import { parseEmoji } from "../../utils";
 
 export function PlayerName(props: { player: PlayerMeta }): JSX.Element {
@@ -13,24 +13,27 @@ export function PlayerName(props: { player: PlayerMeta }): JSX.Element {
 }
 
 export function PlayerTeam(props: { player: PlayerMeta }): JSX.Element {
-    function getTeamData(player: PlayerMeta): { emoji: string; name: string } {
+    function getTeamData(
+        player: PlayerMeta
+    ): { emoji: string; name: string } | null {
         if (player.player.deceased) return { emoji: "💀", name: "The Hall" };
         const team = player.mainTeamData;
-        if (!team) return { emoji: "❓", name: "Null Team" };
+        if (!team) return null;
         return { emoji: parseEmoji(team.emoji), name: team.nickname };
     }
 
-    const { emoji, name } = getTeamData(props.player);
-    return (
+    const data = getTeamData(props.player);
+    return data ? (
         <td className="player-team">
-            <span className="emoji">{emoji}</span>
-            {name}
+            <span className="emoji">{data.emoji}</span> {data.name}
         </td>
+    ) : (
+        <td className="player-team invalid">-</td>
     );
 }
 
 export function PlayerPosition(props: { player: PlayerMeta }): JSX.Element {
-    function getPositionName(meta: PlayerMeta, team: PlayerTeamMapping | null) {
+    function getPositionName(meta: PlayerMeta, team: RosterEntry | null) {
         if (
             !team ||
             meta.player.deceased ||
@@ -38,13 +41,13 @@ export function PlayerPosition(props: { player: PlayerMeta }): JSX.Element {
             meta.modifiers.includes("REDACTED") ||
             meta.modifiers.includes("STATIC")
         )
-            return "-";
+            return null;
 
         if (team.position === "lineup") return "Lineup";
         if (team.position === "rotation") return "Rotation";
-        if (team.position === "bullpen" || team.position === "bench")
-            return "Shadows";
+        if (team.position === "shadows") return "Shadows";
     }
     const { mainTeam } = props.player;
-    return <td>{getPositionName(props.player, mainTeam)}</td>;
+    const position = getPositionName(props.player, mainTeam);
+    return position ? <td>{position}</td> : <td className="invalid">-</td>;
 }

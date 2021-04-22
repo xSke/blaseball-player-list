@@ -86,20 +86,20 @@ export interface BlaseballTeam {
     stadium: string | null;
 }
 
-export interface PlayerTeamMapping {
+export type TeamPosition = "lineup" | "rotation" | "shadows";
+
+export interface RosterEntry {
     player: string;
     teamId: string;
-    position: "lineup" | "rotation" | "bullpen" | "bench";
+    position: TeamPosition;
     index: number;
 }
-
-export type PlayerTeamMap = Record<string, PlayerTeamMapping[]>;
 
 export interface PlayerMeta {
     id: string;
     modifiers: string[];
-    teams: PlayerTeamMapping[];
-    mainTeam: PlayerTeamMapping | null;
+    teams: RosterEntry[];
+    mainTeam: RosterEntry | null;
     mainTeamData: BlaseballTeam | null;
     player: BlaseballPlayer;
 }

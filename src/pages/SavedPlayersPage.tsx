@@ -1,27 +1,19 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { ListOptions } from "../components/sidebar/ListOptionsSelect";
+import React from "react";
 import { PlayerTable } from "../components/table/PlayerTable";
-import { usePlayerTeamData } from "../hooks";
+import { useLeagueData } from "../fetchhooks";
+import { useAppSelector } from "../hooks";
 
-function SavedPlayersPage(props: {
-    options: ListOptions;
-    saved: string[];
-    setSaved: Dispatch<SetStateAction<string[]>>;
-}): JSX.Element {
-    const data = usePlayerTeamData();
-    if (data == null) return <span>Loading...</span>;
+function SavedPlayersPage(): JSX.Element {
+    const data = useLeagueData();
+    if (!data) return <span>Loading...</span>;
 
-    const players = props.saved.map((id) => data.players[id]);
+    const playerIds = useAppSelector((state) => state.savedPlayers.players);
+    const players = playerIds.map((id) => data.players[id]);
 
     return (
         <div>
             <h4>Saved players</h4>
-            <PlayerTable
-                options={props.options}
-                players={players}
-                saved={props.saved}
-                setSaved={props.setSaved}
-            />
+            <PlayerTable players={players} />
         </div>
     );
 }

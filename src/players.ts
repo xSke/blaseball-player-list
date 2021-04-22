@@ -1,4 +1,11 @@
-import { BlaseballPlayer, PlayerMeta } from "./types";
+import { getTeamType } from "./teams";
+import {
+    BlaseballPlayer,
+    BlaseballTeam,
+    ChroniclerPlayer,
+    PlayerMeta,
+    RosterEntry,
+} from "./types";
 
 export function getBattingStars(player: BlaseballPlayer): number {
     return (
@@ -109,12 +116,38 @@ export function extractPlayerMods(player: BlaseballPlayer): string[] {
     return [...permAttr, ...itemAttr, ...seasAttr, ...weekAttr, ...gameAttr];
 }
 
-export function getAllModIds(players: PlayerMeta[]): string[] {
+export function getAllModIds(players: BlaseballPlayer[]): string[] {
     const map: Record<string, boolean> = {};
     for (const p of players) {
-        for (const mod of p.modifiers) {
+        for (const mod of extractPlayerMods(p)) {
             map[mod] = true;
         }
     }
     return Object.keys(map);
+}
+
+export function getPlayerMeta(
+    player: ChroniclerPlayer,
+    teams: Record<string, BlaseballTeam>,
+    roster: Record<string, RosterEntry[]>
+): PlayerMeta {
+    const modifiers = extractPlayerMods(player.data);
+    const playerTeams = roster[player.id] ?? [];
+
+    const leagueTeam = playerTeams.find(
+        (t) => getTeamType(t.teamId) === "league"
+    );
+    const specialTeam = playerTeams.find(
+        (t) => getTeamType(t.teamId) === "special"
+    );
+    const mainTeam = leagueTeam ?? specialTeam ?? null;
+
+    return {
+        id: player.id,
+        player: player.data,
+        modifiers,
+        teams: playerTeams,
+        mainTeam,
+        mainTeamData: mainTeam ? teams[mainTeam.teamId] : null,
+    };
 }

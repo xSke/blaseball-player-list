@@ -22,6 +22,10 @@ html, body, .app {
         &.numeric-stat { 
             padding: 0.25em 0.35em;   
         }
+
+        &.invalid {
+            text-align: center;
+        }
         // padding: 2px;
     }
 }

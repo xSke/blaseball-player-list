@@ -1,24 +1,20 @@
 import Select from "react-select";
-import { PlayerMod } from "../../types";
+import { useAllModifiers } from "../../fetchhooks";
 
-export interface ModifierSelectProps {
+function ModifierSelect(props: {
     id: string;
-    selected: string[];
-    setSelected: (mods: string[]) => void;
-    mods: PlayerMod[];
-}
-
-function ModifierSelect(props: ModifierSelectProps): JSX.Element {
-    const options = props.mods.map((mod) => ({
+    mods: string[];
+    setMods: (mods: string[]) => void;
+}): JSX.Element {
+    const allMods = useAllModifiers() ?? {};
+    const options = Object.values(allMods).map((mod) => ({
         value: mod.id,
         title: mod.title,
         description: mod.description,
     }));
     options.sort((a, b) => a.title.localeCompare(b.title));
 
-    const selectedOptions = options.filter(
-        (o) => props.selected.indexOf(o.value) > -1
-    );
+    const selectedOptions = options.filter((o) => props.mods.includes(o.value));
 
     return (
         <Select
@@ -32,16 +28,16 @@ function ModifierSelect(props: ModifierSelectProps): JSX.Element {
                     <span>
                         {option.title}{" "}
                         {context === "menu" && (
-                            <small className="text-muted">
+                            <div className="small text-muted">
                                 {option.description}
-                            </small>
+                            </div>
                         )}
                     </span>
                 );
             }}
             onChange={(newItems) => {
                 const mods = newItems.map((item) => item.value);
-                props.setSelected(mods);
+                props.setMods(mods);
             }}
         />
     );

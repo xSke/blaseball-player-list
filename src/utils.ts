@@ -1,13 +1,11 @@
-import { ChroniclerTeam, PlayerMeta, PlayerTeamMap } from "./types";
+import { ChroniclerTeam, PlayerMeta, RosterEntry, TeamPosition } from "./types";
 
-export function generatePlayerTeamMap(teams: ChroniclerTeam[]): PlayerTeamMap {
-    const map: PlayerTeamMap = {};
+export function generatePlayerTeamMap(
+    teams: ChroniclerTeam[]
+): Record<string, RosterEntry[]> {
+    const map: Record<string, RosterEntry[]> = {};
 
-    function add(
-        teamId: string,
-        playerIds: string[],
-        position: "lineup" | "rotation" | "bullpen" | "bench"
-    ) {
+    function add(teamId: string, playerIds: string[], position: TeamPosition) {
         for (let i = 0; i < playerIds.length; i++) {
             const playerId = playerIds[i];
             if (!map[playerId]) map[playerId] = [];
@@ -23,8 +21,8 @@ export function generatePlayerTeamMap(teams: ChroniclerTeam[]): PlayerTeamMap {
     for (const team of teams) {
         add(team.id, team.data.lineup, "lineup");
         add(team.id, team.data.rotation, "rotation");
-        add(team.id, team.data.bullpen, "bullpen");
-        add(team.id, team.data.bench, "bench");
+        add(team.id, team.data.bullpen, "shadows");
+        add(team.id, team.data.bench, "shadows");
     }
 
     return map;
@@ -39,8 +37,7 @@ export function positionSortKey(meta: PlayerMeta): number {
     if (!team) return 1000000;
 
     return (
-        ["lineup", "rotation", "bullpen", "bench"].indexOf(team.position) *
-            1000 +
+        ["lineup", "rotation", "shadows"].indexOf(team.position) * 1000 +
         team.index
     );
 }

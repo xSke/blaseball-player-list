@@ -8,14 +8,14 @@ import {
     pitchingAttributes,
     pressurization,
 } from "../../attributes";
+import { TableOptionsSlice } from "../../store/tableOptionsSlice";
 import { getCombinedFakeStars, getCombinedStars } from "../../players";
 import { BlaseballPlayer, PlayerMeta } from "../../types";
 import { positionSortKey as getPositionSortKey } from "../../utils";
-import { ListOptions } from "../sidebar/ListOptionsSelect";
 import { PlayerName, PlayerPosition, PlayerTeam } from "./cells";
 import { attrTiers, combinedStarTiers, numericStat, starTiers } from "./stats";
 
-export function getColumns(options: ListOptions): ColumnGroup[] {
+export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
     const combinedStarGetter = options.useRealStars
         ? getCombinedStars
         : getCombinedFakeStars;
@@ -81,7 +81,7 @@ export function getColumns(options: ListOptions): ColumnGroup[] {
                 },
                 {
                     id: "eDensity",
-                    name: "eD",
+                    name: "eDensity",
                     alt: "eDensity",
                     sortKey: (p) => p.eDensity ?? null,
                     render: ({ player }) => (
@@ -97,18 +97,18 @@ export function getColumns(options: ListOptions): ColumnGroup[] {
     ];
 }
 
-function advancedStats(options: ListOptions): ColumnGroup[] {
+function advancedStats(options: TableOptionsSlice): ColumnGroup[] {
     const groups = [];
-    if (options.columns.includes("batting"))
+    if (options.columns.batting)
         groups.push(statCategoryGroup(battingAttributes, options));
 
-    if (options.columns.includes("pitching"))
+    if (options.columns.pitching)
         groups.push(statCategoryGroup(pitchingAttributes, options));
 
-    if (options.columns.includes("baserunning"))
+    if (options.columns.baserunning)
         groups.push(statCategoryGroup(baserunningAttributes, options));
 
-    if (options.columns.includes("defense"))
+    if (options.columns.defense)
         groups.push(statCategoryGroup(defenseAttributes, options));
 
     return groups;
@@ -116,7 +116,7 @@ function advancedStats(options: ListOptions): ColumnGroup[] {
 
 function statCategoryGroup(
     category: Category,
-    options: ListOptions
+    options: TableOptionsSlice
 ): ColumnGroup {
     const starGetter = options.useRealStars
         ? category.stars
@@ -147,7 +147,7 @@ function statAttr(attr: Attribute): Column {
     };
 }
 
-function basicStars(options: ListOptions): ColumnGroup[] {
+function basicStars(options: TableOptionsSlice): ColumnGroup[] {
     return [
         {
             name: "Stars",
@@ -161,7 +161,7 @@ function basicStars(options: ListOptions): ColumnGroup[] {
     ];
 }
 
-function basicStar(category: Category, options: ListOptions) {
+function basicStar(category: Category, options: TableOptionsSlice) {
     const starGetter = options.useRealStars
         ? category.stars
         : category.fakeStars;
@@ -182,7 +182,6 @@ export interface ColumnGroup {
 
 export interface CellProps {
     player: PlayerMeta;
-    options: ListOptions;
 }
 export type CellComponent = (props: CellProps) => JSX.Element;
 

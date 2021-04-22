@@ -1,42 +1,29 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
+import {
+    setShowAdvancedStats,
+    setUseRealStars,
+} from "../../store/tableOptionsSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import CheckboxOption from "../CheckboxOption";
-import { ListColumn } from "./PlayerColumnsSelect";
 
-export interface ListOptions {
-    showAdvancedStats: boolean;
-    useRealStars: boolean;
+function ListOptionsSelect(): JSX.Element {
+    const dispatch = useAppDispatch();
+    const opts = useAppSelector((state) => state.tableOptions);
 
-    columns: ListColumn[];
-}
-
-function ListOptionsSelect(props: {
-    options: ListOptions;
-    setOptions: Dispatch<SetStateAction<ListOptions>>;
-}): JSX.Element {
     return (
-        <div className="sidebar-section">
+        <div className="mb-4">
             <CheckboxOption
                 id="Show advanced stats"
-                value={props.options.showAdvancedStats}
-                setValue={(val) =>
-                    props.setOptions((opts) => ({
-                        ...opts,
-                        showAdvancedStats: val,
-                    }))
-                }
+                value={opts.showAdvancedStats}
+                setValue={(val) => dispatch(setShowAdvancedStats(val))}
             >
                 Show advanced stats
             </CheckboxOption>
 
             <CheckboxOption
                 id="real-stars"
-                value={props.options.useRealStars}
-                setValue={(val) =>
-                    props.setOptions((opts) => ({
-                        ...opts,
-                        useRealStars: val,
-                    }))
-                }
+                value={opts.useRealStars}
+                setValue={(val) => dispatch(setUseRealStars(val))}
             >
                 Use real star formula
             </CheckboxOption>

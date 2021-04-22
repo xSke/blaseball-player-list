@@ -1,28 +1,13 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { Route, Switch, useHistory, useParams } from "react-router";
-import ListOptionsSelect, { ListOptions } from "./ListOptionsSelect";
+import ListOptionsSelect from "./ListOptionsSelect";
 import Nav from "./Nav";
 import PlayerFilterSelect from "./PlayerFilterSelect";
 import { PlayerColumnsSelect } from "./PlayerColumnsSelect";
 import { TeamSelect } from "./TeamSelect";
-import { useTeamData } from "../../hooks";
+import { useTeamData } from "../../fetchhooks";
 
-export interface PlayerFilters {
-    search: string;
-    modifiers: string[];
-    positions: string[];
-    teams: string[];
-}
-
-export interface SidebarProps {
-    filters: PlayerFilters;
-    setFilters: Dispatch<SetStateAction<PlayerFilters>>;
-
-    options: ListOptions;
-    setOptions: Dispatch<SetStateAction<ListOptions>>;
-}
-
-function Sidebar(props: SidebarProps): JSX.Element {
+function Sidebar(): JSX.Element {
     return (
         <div>
             <div className="sidebar-section">
@@ -31,27 +16,17 @@ function Sidebar(props: SidebarProps): JSX.Element {
 
             <Switch>
                 <Route path="/" exact>
-                    <PlayerFilterSelect
-                        filters={props.filters}
-                        setFilters={props.setFilters}
-                    />
+                    <PlayerFilterSelect />
                 </Route>
                 <Route path="/team/:abbr">
                     <SingleTeamFilter />
                 </Route>
             </Switch>
 
-            <ListOptionsSelect
-                options={props.options}
-                setOptions={props.setOptions}
-            />
-
-            <PlayerColumnsSelect
-                columns={props.options.columns}
-                setColumns={(columns) =>
-                    props.setOptions((opts) => ({ ...opts, columns: columns }))
-                }
-            />
+            <div className="sidebar-section">
+                <ListOptionsSelect />
+                <PlayerColumnsSelect />
+            </div>
         </div>
     );
 }
@@ -61,12 +36,11 @@ function SingleTeamFilter() {
     const { abbr } = useParams<{ abbr: string }>();
     const teams = useTeamData();
 
-    console.log("abbr", abbr);
-    const selectedTeam = Object.values(teams.teamMap).find(
+    if (!teams) return null;
+
+    const selectedTeam = Object.values(teams.teams).find(
         (t) => t.shorthand === abbr
     );
-
-    console.log("team", selectedTeam);
 
     return (
         <div className="sidebar-section">
@@ -79,7 +53,7 @@ function SingleTeamFilter() {
                     multi={false}
                     teams={selectedTeam ? [selectedTeam.id] : []}
                     setTeams={(newTeams) => {
-                        const newSelected = teams.teamMap[newTeams[0]];
+                        const newSelected = teams.teams[newTeams[0]];
                         history.push(`/team/${newSelected.shorthand}`);
                     }}
                 />

@@ -1,15 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { BlaseballPlayer, PlayerMeta } from "../../types";
-import { ListOptions } from "../sidebar/ListOptionsSelect";
 import Pagination from "../Pagination";
 import { ColumnGroup, getColumns } from "./columns";
-
-export type SetSaved = (fn: (old: string[]) => string[]) => void;
-
-export interface SavedPlayerProps {
-    saved: string[];
-    setSaved: SetSaved;
-}
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { save, unsave } from "../../store/savedPlayersSlice";
 
 export type SortKeyGetter = (
     p: BlaseballPlayer,
@@ -27,44 +21,43 @@ interface SortStateProps {
     setSort: (sort: SortState) => void;
 }
 
-export interface PlayerTableProps extends SavedPlayerProps {
+export interface PlayerTableProps {
     players: PlayerMeta[];
-    options: ListOptions;
+    pageSize?: number;
 }
 
 export function PlayerTable(props: PlayerTableProps): JSX.Element {
     const [sort, setSort] = useState<SortState>({ column: null });
     const [page, setPage] = useState<number>(0);
+    const tableOptions = useAppSelector((state) => state.tableOptions);
 
-    const pageSize = 50;
-    const pageCount = Math.ceil(props.players.length / pageSize);
-
-    const columns = useMemo(() => getColumns(props.options), [props.options]);
+    const columns = useMemo(() => getColumns(tableOptions), [tableOptions]);
     const sortedPlayers = useMemo(
         () => sortPlayers(props.players, columns, sort),
-        [columns, props.players, props.options, sort]
+        [columns, props.players, tableOptions, sort]
     );
 
+    const pageCount = props.pageSize
+        ? Math.ceil(props.players.length / props.pageSize)
+        : 0;
+
     const pagedPlayers = useMemo(() => {
+        if (!props.pageSize) return sortedPlayers;
+
+        const pageCount = Math.ceil(props.players.length / props.pageSize);
         const actualPage = Math.min(page, pageCount - 1);
         return sortedPlayers.slice(
-            actualPage * pageSize,
-            (actualPage + 1) * pageSize
+            actualPage * props.pageSize,
+            (actualPage + 1) * props.pageSize
         );
-    }, [sortedPlayers, page, pageSize, pageCount]);
+    }, [sortedPlayers, page, props.pageSize]);
 
     return (
         <div>
             <table className="table table-sm table-hover player-table">
                 <TableColgroups columns={columns} />
                 <TableHeader columns={columns} sort={sort} setSort={setSort} />
-                <TableBody
-                    players={pagedPlayers}
-                    columns={columns}
-                    options={props.options}
-                    saved={props.saved}
-                    setSaved={props.setSaved}
-                />
+                <TableBody players={pagedPlayers} columns={columns} />
             </table>
             <Pagination
                 pageCount={pageCount}
@@ -89,54 +82,35 @@ function TableColgroups(props: { columns: ColumnGroup[] }) {
     );
 }
 
-interface TableBodyProps extends SavedPlayerProps {
+interface TableBodyProps {
     players: PlayerMeta[];
     columns: ColumnGroup[];
-    options: ListOptions;
 }
 
 function TableBody(props: TableBodyProps) {
     return (
         <tbody>
             {props.players.map((p) => (
-                <TableRow
-                    key={p.id}
-                    player={p}
-                    columns={props.columns}
-                    options={props.options}
-                    saved={props.saved}
-                    setSaved={props.setSaved}
-                />
+                <TableRow key={p.id} player={p} columns={props.columns} />
             ))}
         </tbody>
     );
 }
 
-interface TableRowProps extends SavedPlayerProps {
+interface TableRowProps {
     player: PlayerMeta;
     columns: ColumnGroup[];
-    options: ListOptions;
 }
 
 function TableRow(props: TableRowProps) {
     return (
         <tr>
-            <SaveCheckbox
-                id={props.player.id}
-                saved={props.saved}
-                setSaved={props.setSaved}
-            />
+            <SaveCheckbox id={props.player.id} />
             {props.columns.flatMap((cg) => {
                 return cg.columns.map((c) => {
                     const Cell = c.render;
                     if (!Cell) return <td key={c.id} />;
-                    return (
-                        <Cell
-                            key={c.id}
-                            player={props.player}
-                            options={props.options}
-                        />
-                    );
+                    return <Cell key={c.id} player={props.player} />;
                 });
             })}
         </tr>
@@ -199,12 +173,10 @@ function TableColumnHeader(props: TableColumnHeaderProps) {
     );
 }
 
-function SaveCheckbox(props: {
-    id: string;
-    saved: string[];
-    setSaved: SetSaved;
-}) {
-    const checked = props.saved.indexOf(props.id) !== -1;
+function SaveCheckbox(props: { id: string }) {
+    const dispatch = useAppDispatch();
+    const players = useAppSelector((state) => state.savedPlayers.players);
+    const checked = players.includes(props.id);
 
     return (
         <td>
@@ -214,11 +186,9 @@ function SaveCheckbox(props: {
                 checked={checked}
                 onChange={(e) => {
                     if (e.target.checked) {
-                        props.setSaved((old) => [...old, props.id]);
+                        dispatch(save(props.id));
                     } else {
-                        props.setSaved((old) =>
-                            old.filter((id) => id !== props.id)
-                        );
+                        dispatch(unsave(props.id));
                     }
                 }}
             />
