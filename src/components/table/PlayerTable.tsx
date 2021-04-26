@@ -100,6 +100,9 @@ interface TableRowProps {
 }
 
 function TableRow(props: TableRowProps) {
+    const toShow = useAppSelector((state) => state.playerItems.toShow);
+    const showItems = toShow.includes(props.player.id);
+
     return (
         <tr>
             <SaveCheckbox id={props.player.id} />
