@@ -70,6 +70,9 @@ export class AdvancedStats {
     }
 
     private addItem(item: PlayerItem) {
+        // ignore broken item
+        if (item.health === 0 && item.durability !== -1) return;
+
         // mutable...
         function applyPart(stats: AdvancedStats, part: ItemPart) {
             for (const adj of part.adjustments) {
