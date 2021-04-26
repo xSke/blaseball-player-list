@@ -14,6 +14,7 @@ export interface TableOptionsSlice {
     columns: Record<ListColumn, boolean>;
     useRealStars: boolean;
     showAdvancedStats: boolean;
+    applyItemAdjustments: boolean;
 }
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
         vibestats: true,
         misc: true,
     },
+    applyItemAdjustments: true,
     useRealStars: true,
     showAdvancedStats: true,
 } as TableOptionsSlice;
@@ -47,6 +49,9 @@ export const tableOptionsSlice = createSlice({
         setShowAdvancedStats: (state, action: PayloadAction<boolean>) => {
             state.showAdvancedStats = action.payload;
         },
+        setApplyItemAdjustments: (state, action: PayloadAction<boolean>) => {
+            state.applyItemAdjustments = action.payload;
+        },
     },
 });
 
@@ -54,4 +59,5 @@ export const {
     setColumn,
     setUseRealStars,
     setShowAdvancedStats,
+    setApplyItemAdjustments,
 } = tableOptionsSlice.actions;

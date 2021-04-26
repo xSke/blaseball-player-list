@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    setApplyItemAdjustments,
     setShowAdvancedStats,
     setUseRealStars,
 } from "../../store/tableOptionsSlice";
@@ -26,6 +27,14 @@ function ListOptionsSelect(): JSX.Element {
                 setValue={(val) => dispatch(setUseRealStars(val))}
             >
                 Use real star formula
+            </CheckboxOption>
+
+            <CheckboxOption
+                id="apply-item-adj"
+                value={opts.applyItemAdjustments}
+                setValue={(val) => dispatch(setApplyItemAdjustments(val))}
+            >
+                Apply item adjustments
             </CheckboxOption>
         </div>
     );

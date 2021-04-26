@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { save, unsave } from "../../store/savedPlayersSlice";
 import { Player } from "../../models/Player";
 
-export type SortKeyGetter = (player: Player) => string | number;
+export type SortKeyGetter = (p: Player) => string | number;
 
 export interface SortState {
     column: string | null;

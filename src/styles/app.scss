@@ -79,6 +79,10 @@ html, body, .app {
     &.numeric-stat-5 {
         background-color: rgba(116, 216, 180, 0.5);
     }
+
+    &.numeric-stat-item {
+        font-style: italic;
+    }
 }
 
 .sidebar {
@@ -105,4 +109,12 @@ html, body, .app {
 
 .player-group {
     margin-bottom: 1rem;
+}
+
+.rc-tooltip {
+    font-size: 13px;
+
+    .rc-tooltip-inner {
+        background-color: #444;
+    }
 }
