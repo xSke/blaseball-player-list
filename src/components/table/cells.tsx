@@ -92,10 +92,13 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
                 playerItems?.map((item) => {
                     return (<Tooltip placement="top" overlay={
                         <span>
-                            {item.name} <i>{(item.health === 0 ? " (broken)" : `(${item.health}/${item.durability})`)}</i> 
+                            {item.name} <i>{(item.health === 0 ? " (broken)" : `(${item.health}/${item.durability})`)}</i>
                         </span>
                     }>
-                        <span>{rootNameMap[item.root.name]}</span>
+                        <div className="item-icon">
+                            {rootNameMap[item.root.name]}
+                            {item.health === 0 ? <span className="broken-item">❌</span> : <span></span>}
+                        </div>
                     </Tooltip>)
                 })
             }
