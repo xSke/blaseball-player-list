@@ -1,9 +1,9 @@
-import { PlayerMeta, RosterEntry } from "../../types";
+import { Player, RosterEntry } from "../../models/Player";
 import { parseEmoji } from "../../utils";
 
-export function PlayerName(props: { player: PlayerMeta }): JSX.Element {
+export function PlayerName(props: { player: Player }): JSX.Element {
     const id = props.player.id;
-    const name = props.player.player.name;
+    const name = props.player.data.name;
 
     return (
         <td className="player-name">
@@ -14,11 +14,11 @@ export function PlayerName(props: { player: PlayerMeta }): JSX.Element {
     );
 }
 
-export function PlayerTeam(props: { player: PlayerMeta }): JSX.Element {
+export function PlayerTeam(props: { player: Player }): JSX.Element {
     function getTeamData(
-        player: PlayerMeta
+        player: Player
     ): { emoji: string; name: string } | null {
-        if (player.player.deceased) return { emoji: "💀", name: "The Hall" };
+        if (player.data.deceased) return { emoji: "💀", name: "The Hall" };
         const team = player.mainTeamData;
         if (!team) return null;
         return { emoji: parseEmoji(team.emoji), name: team.nickname };
@@ -34,14 +34,18 @@ export function PlayerTeam(props: { player: PlayerMeta }): JSX.Element {
     );
 }
 
-export function PlayerPosition(props: { player: PlayerMeta }): JSX.Element {
-    function getPositionName(meta: PlayerMeta, team: RosterEntry | null) {
+export function PlayerPosition(props: { player: Player }): JSX.Element {
+    function getPositionName({
+        player,
+        team,
+    }: {
+        player: Player;
+        team: RosterEntry | null;
+    }) {
         if (
             !team ||
-            meta.player.deceased ||
-            meta.modifiers.includes("COFFEE_EXIT") ||
-            meta.modifiers.includes("REDACTED") ||
-            meta.modifiers.includes("STATIC")
+            player.data.deceased ||
+            player.hasMod("COFFEE_EXIT", "REDACTED", "STATIC", "LEGENDARY")
         )
             return null;
 
@@ -50,7 +54,7 @@ export function PlayerPosition(props: { player: PlayerMeta }): JSX.Element {
         if (team.position === "shadows") return "Shadows";
     }
     const { mainTeam } = props.player;
-    const position = getPositionName(props.player, mainTeam);
+    const position = getPositionName({ player: props.player, team: mainTeam });
     return position ? (
         <td className="player-position">{position}</td>
     ) : (

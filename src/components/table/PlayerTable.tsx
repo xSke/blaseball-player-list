@@ -1,15 +1,11 @@
 import React, { useMemo, useState } from "react";
-import { PlayerMeta } from "../../types";
 import Pagination from "../Pagination";
 import { ColumnGroup, getColumns } from "./columns";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { save, unsave } from "../../store/savedPlayersSlice";
-import { BlaseballPlayer } from "../../api/types";
+import { Player } from "../../models/Player";
 
-export type SortKeyGetter = (
-    p: BlaseballPlayer,
-    meta: PlayerMeta
-) => string | number;
+export type SortKeyGetter = (player: Player) => string | number;
 
 export interface SortState {
     column: string | null;
@@ -23,7 +19,7 @@ interface SortStateProps {
 }
 
 export interface PlayerTableProps {
-    players: PlayerMeta[];
+    players: Player[];
     pageSize?: number;
 }
 
@@ -84,7 +80,7 @@ function TableColgroups(props: { columns: ColumnGroup[] }) {
 }
 
 interface TableBodyProps {
-    players: PlayerMeta[];
+    players: Player[];
     columns: ColumnGroup[];
 }
 
@@ -99,7 +95,7 @@ function TableBody(props: TableBodyProps) {
 }
 
 interface TableRowProps {
-    player: PlayerMeta;
+    player: Player;
     columns: ColumnGroup[];
 }
 
@@ -216,10 +212,10 @@ function getSortState(thisId: string, state: SortState): SortState {
 }
 
 function sortPlayers(
-    players: PlayerMeta[],
+    players: Player[],
     columns: ColumnGroup[],
     sort: SortState
-): PlayerMeta[] {
+): Player[] {
     if (!sort.column) return players;
 
     const sortColumn = columns
@@ -230,8 +226,8 @@ function sortPlayers(
     if (!sortKey) return players;
 
     return [...players].sort((a, b) => {
-        const keyA = sortKey(a.player, a) ?? 0;
-        const keyB = sortKey(b.player, b) ?? 0;
+        const keyA = sortKey(a) ?? 0;
+        const keyB = sortKey(b) ?? 0;
         const comp = keyA > keyB ? 1 : keyA < keyB ? -1 : 0;
         return sort.dir === "asc" ? comp : -comp;
     });

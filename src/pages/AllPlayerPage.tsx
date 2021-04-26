@@ -3,9 +3,8 @@ import { useDebounce } from "use-debounce/lib";
 import { PlayerTable } from "../components/table/PlayerTable";
 import { PlayerFilterSlice } from "../store/playerFilterSlice";
 import { useAppSelector } from "../hooks";
-import { PlayerMeta, RosterEntry } from "../types";
 import { useLeagueData } from "../api/fetchhooks";
-import { getPlayerStatus } from "../players";
+import { Player, RosterEntry } from "../models/Player";
 
 function AllPlayerPage(): JSX.Element {
     const data = useLeagueData();
@@ -27,16 +26,16 @@ function AllPlayerPage(): JSX.Element {
 }
 
 function applyPlayerFilter(
-    players: PlayerMeta[],
+    players: Player[],
     options: PlayerFilterSlice
-): PlayerMeta[] {
+): Player[] {
     return players.filter((p) => {
         if (!matchTeam(p.teams, options.teams)) return false;
-        if (!matchName(p.player.name, options.search)) return false;
-        if (!matchMods(p.modifiers, options.mods)) return false;
+        if (!matchName(p.data.name, options.search)) return false;
+        if (!matchMods(p.mods, options.mods)) return false;
         if (!matchPositions(p.mainTeam?.position, options.positions))
             return false;
-        if (!matchStatus(getPlayerStatus(p), options.statuses)) return false;
+        if (!matchStatus(p.status(), options.statuses)) return false;
 
         return true;
     });

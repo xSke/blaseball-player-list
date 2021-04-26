@@ -83,3 +83,12 @@ export interface ChroniclerTeam {
     id: string;
     data: BlaseballTeam;
 }
+
+export interface PlayerMod {
+    id: string;
+    color: string;
+    textColor: string;
+    background: string;
+    title: string;
+    description: string;
+}

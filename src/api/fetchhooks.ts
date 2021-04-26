@@ -1,12 +1,16 @@
 import { useMemo } from "react";
 import useSWR from "swr";
-import { BlaseballTeam, ChroniclerPlayer, ChroniclerTeam } from "./types";
-import { getAllModIds, getPlayerMeta } from "../players";
-import { PlayerMeta, PlayerMod, RosterEntry } from "../types";
+import {
+    BlaseballTeam,
+    ChroniclerPlayer,
+    ChroniclerTeam,
+    PlayerMod,
+} from "./types";
 import { generatePlayerTeamMap } from "../utils";
+import { getAllModIds, Player, RosterEntry } from "../models/Player";
 
 export interface LeagueData {
-    players: Record<string, PlayerMeta>;
+    players: Record<string, Player>;
     teams: Record<string, BlaseballTeam>;
     roster: Record<string, RosterEntry[]>;
 }
@@ -26,7 +30,7 @@ export function useLeagueData(): LeagueData | null {
         const players = Object.fromEntries(
             playersRaw.map((p) => [
                 p.id,
-                getPlayerMeta(p, teamData.teams, teamData.roster),
+                new Player(p, teamData.teams, teamData.roster),
             ])
         );
 

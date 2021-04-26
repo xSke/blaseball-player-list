@@ -1,4 +1,4 @@
-import { BlaseballPlayer } from "../../api/types";
+import { Player } from "../../models/Player";
 import { CellComponent, CellProps } from "./columns";
 
 export function NumericStat(props: {
@@ -18,14 +18,14 @@ export function NumericStat(props: {
 }
 
 export function numericStat(
-    accessor: (p: BlaseballPlayer) => number | null,
+    accessor: (p: Player) => number | null,
     tiers?: number[],
     inverse?: boolean
 ): CellComponent {
     const actualTiers = tiers ?? attrTiers;
 
     function Cell(props: CellProps) {
-        const value = accessor(props.player.player);
+        const value = accessor(props.player);
         if (value === null) return <td className="numeric-stat">-</td>;
 
         const tierValue = inverse ? 1 - value : value;

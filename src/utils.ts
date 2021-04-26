@@ -1,5 +1,5 @@
 import { ChroniclerTeam } from "./api/types";
-import { PlayerMeta, RosterEntry, TeamPosition } from "./types";
+import { Player, RosterEntry, TeamPosition } from "./models/Player";
 
 export function generatePlayerTeamMap(
     teams: ChroniclerTeam[]
@@ -33,7 +33,7 @@ export function parseEmoji(emoji: string): string {
     return emoji.startsWith("0x") ? String.fromCodePoint(Number(emoji)) : emoji;
 }
 
-export function positionSortKey(meta: PlayerMeta): number {
+export function positionSortKey(meta: Player): number {
     const team = meta.mainTeam;
     if (!team) return 1000000;
 

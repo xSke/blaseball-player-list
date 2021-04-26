@@ -15,6 +15,8 @@ function Pagination(props: PaginationProps): JSX.Element | null {
 
     if (props.pageCount <= 1) return null;
 
+    const actualPage = Math.min(props.pageCount - 1, props.pageIndex);
+
     return (
         <nav>
             <ul className="pagination">
@@ -35,7 +37,7 @@ function Pagination(props: PaginationProps): JSX.Element | null {
                         key={idx}
                         className={clsx(
                             "page-item",
-                            props.pageIndex === idx && "active"
+                            actualPage === idx && "active"
                         )}
                     >
                         <a
