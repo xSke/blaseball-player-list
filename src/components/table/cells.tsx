@@ -85,7 +85,6 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
         "Shoes" : "👟",
         "Sunglasses" : "🕶️",
     };
-    console.log();
     const itemAmnt = (playerItems ? playerItems.length : 0);
     return itemAmnt > 0 ? (
         <td>
