@@ -1,6 +1,7 @@
 import { Player, RosterEntry } from "../../models/Player";
 import { parseEmoji } from "../../utils";
 import { useAppDispatch, useAppSelector } from "../../hooks";
+import Tooltip from "rc-tooltip";
 import { toggle } from "../../store/playerItemSlice";
 
 export function PlayerName(props: { player: Player }): JSX.Element {
@@ -85,10 +86,21 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
         Shoes: "👟",
         Sunglasses: "🕶️",
     };
+
     const itemAmnt = playerItems ? playerItems.length : 0;
     return itemAmnt > 0 ? (
         <td>
-            {playerItems?.map((item) => rootNameMap[item.root.name])}
+            {
+                playerItems?.map((item) => {
+                    return (<Tooltip placement="top" overlay={
+                        <span>
+                            {item.name}
+                        </span>
+                    }>
+                        <span>{rootNameMap[item.root.name]}</span>
+                    </Tooltip>)
+                })
+            }
             {/* <button
                 onClick={() => dispatch(toggle(props.player.id))}
                 className="btn item-btn"
