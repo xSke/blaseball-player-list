@@ -106,3 +106,15 @@ html, body, .app {
 .player-group {
     margin-bottom: 1rem;
 }
+
+.item-btn {
+    margin-left: 6px;
+    font-size: 14px;
+    background: #0D6EFD;
+    padding: 0 3px;
+    color: white;
+
+    &:hover {
+        background: #6ea8ff;
+    }
+}

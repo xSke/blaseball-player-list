@@ -1,7 +1,7 @@
 import { TableOptionsSlice } from "../../store/tableOptionsSlice";
 import { positionSortKey as getPositionSortKey } from "../../utils";
-import { PlayerName, PlayerPosition, PlayerTeam } from "./cells";
-import { attrTiers, numericStat, starTiers } from "./stats";
+import { PlayerName, PlayerPosition, PlayerTeam, PlayerItem } from "./cells";
+import { attrTiers, combinedStarTiers, numericStat, starTiers } from "./stats";
 import { BlaseballPlayer } from "../../api/types";
 import { Player, PlayerStars } from "../../models/Player";
 
@@ -17,6 +17,12 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                     name: "Name",
                     render: PlayerName,
                     sortKey: (p) => p.data.name,
+                },
+                {
+                    id: "item",
+                    name: "Items",
+                    render: PlayerItem,
+                    sortKey: (p) => p.data.items ? p.data.items.length : 0
                 },
                 {
                     id: "team",

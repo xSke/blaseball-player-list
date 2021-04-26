@@ -44,6 +44,8 @@ export interface BlaseballPlayer {
     gameAttr?: string[];
     itemAttr?: string[];
 
+    items: Item[];
+
     deceased: boolean;
     soul: number;
     fate: number;
@@ -91,4 +93,34 @@ export interface PlayerMod {
     background: string;
     title: string;
     description: string;
+}
+
+export interface Item {
+    id: string;
+    name: string;
+
+    baserunningRating: number;
+    defenseRating: number;
+    pitchingRating: number;
+    hittingRating: number;
+
+    durability: number;
+    health: number;
+    forger?: any;
+    forgerName?: any;
+
+    postPrefix: any;
+    prePrefix: any;
+    prefixes: any;
+
+    root: {
+        name: string;
+        adjustments: Adjustment[];
+    }
+}
+
+export interface Adjustment {
+    stat: number;
+    type: number;
+    value: number;
 }

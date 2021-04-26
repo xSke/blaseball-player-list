@@ -61,3 +61,32 @@ export function PlayerPosition(props: { player: Player }): JSX.Element {
         <td className="player-position invalid">-</td>
     );
 }
+
+export function PlayerItem(props: { player: Player }): JSX.Element {
+    const playerItems = props.player.data.items;
+    type itemMap = {
+        [key: string] : string
+    };
+    const rootNameMap : itemMap = {
+        "Bat" : "🏏",
+        "Board" : "🛹",
+        "Cap" : "🧢",
+        "Field" : "🔵",
+        "Glove" : "🧤",
+        "Jersey" : "👕",
+        "Necklace" : "📿",
+        "Ring" : "💍",
+        "Shoes" : "👟",
+        "Sunglasses" : "🕶️",
+    };
+    console.log();
+    // console.log(playerItems);
+    return playerItems.length > 0 ? (
+        <td>
+            {playerItems.map(item => rootNameMap[item.root.name])}
+            <button className="btn item-btn">▾</button>
+        </td>
+    ) : (
+        <td>-</td>
+    );
+}
