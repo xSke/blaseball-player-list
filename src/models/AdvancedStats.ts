@@ -17,6 +17,7 @@ export type StatName =
     | "indulgence"
     | "groundFriction"
     | "shakespearianism"
+    | "suppression"
     | "unthwackability"
     | "coldness"
     | "overpowerment"
@@ -26,10 +27,7 @@ export type StatName =
     | "tenaciousness"
     | "watchfulness"
     | "anticapitalism"
-    | "chasiness"
-
-    // this one isn't in the item list (???)
-    | "suppression";
+    | "chasiness";
 
 export class AdvancedStats {
     private constructor(private data: Record<StatName, number>) {}
@@ -37,7 +35,6 @@ export class AdvancedStats {
     static new(): AdvancedStats {
         const record: Partial<Record<StatName, number>> = {};
         for (const id of statIndices) record[id] = 0;
-        record["suppression"] = 0; // need to special case this one o.o
         return new AdvancedStats(record as Record<StatName, number>);
     }
 
@@ -168,6 +165,7 @@ const statIndices: StatName[] = [
     "indulgence",
     "groundFriction",
     "shakespearianism",
+    "suppression",
     "unthwackability",
     "coldness",
     "overpowerment",
