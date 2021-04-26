@@ -1,4 +1,10 @@
-import { BlaseballPlayer, BlaseballTeam, ChroniclerPlayer } from "../api/types";
+import {
+    BlaseballPlayer,
+    BlaseballTeam,
+    ChroniclerPlayer,
+    ItemPart,
+    PlayerItem,
+} from "../api/types";
 import { getTeamType } from "../teams";
 
 export type TeamPosition = "lineup" | "rotation" | "shadows";
@@ -34,6 +40,9 @@ export class Player {
     public readonly mainTeamData: BlaseballTeam | null;
     public readonly teams: RosterEntry[];
 
+    public readonly stats: AdvancedStats;
+    public readonly itemStats: AdvancedStats;
+
     constructor(
         player: ChroniclerPlayer,
         teams: Record<string, BlaseballTeam>,
@@ -47,6 +56,9 @@ export class Player {
         this.mainTeamData = this.mainTeam ? teams[this.mainTeam.teamId] : null;
 
         this.mods = extractPlayerMods(this.data);
+
+        this.stats = extractPlayerStats(this.data);
+        this.itemStats = getItemStats(this.data.items ?? []);
     }
 
     hasMod(...mods: string[]): boolean {
@@ -218,4 +230,130 @@ export function getAllModIds(players: BlaseballPlayer[]): string[] {
         }
     }
     return Object.keys(map);
+}
+
+const statIndices: StatName[] = [
+    "tragicness",
+    "buoyancy",
+    "thwackability",
+    "moxie",
+    "divinity",
+    "musclitude",
+    "patheticism",
+    "martyrdom",
+    "cinnamon",
+    "baseThirst",
+    "laserlikeness",
+    "continuation",
+    "indulgence",
+    "groundFriction",
+    "shakespearianism",
+    "unthwackability",
+    "coldness",
+    "overpowerment",
+    "ruthlessness",
+    "pressurization",
+    "omniscience",
+    "tenaciousness",
+    "watchfulness",
+    "anticapitalism",
+    "chasiness",
+];
+
+export type StatName =
+    | "tragicness"
+    | "buoyancy"
+    | "thwackability"
+    | "moxie"
+    | "divinity"
+    | "musclitude"
+    | "patheticism"
+    | "martyrdom"
+    | "cinnamon"
+    | "baseThirst"
+    | "laserlikeness"
+    | "continuation"
+    | "indulgence"
+    | "groundFriction"
+    | "shakespearianism"
+    | "unthwackability"
+    | "coldness"
+    | "overpowerment"
+    | "ruthlessness"
+    | "pressurization"
+    | "omniscience"
+    | "tenaciousness"
+    | "watchfulness"
+    | "anticapitalism"
+    | "chasiness"
+    | "suppression"; // this one isn't in the item list (???)
+
+export type AdvancedStats = Record<StatName, number>;
+
+function applyPart(stats: AdvancedStats, part: ItemPart) {
+    for (const adj of part.adjustments) {
+        if (adj.type === 1) {
+            const stat = statIndices[adj.stat];
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (stats as any)[stat] += adj.value;
+        }
+    }
+}
+
+function applyItemStats(stats: AdvancedStats, item: PlayerItem) {
+    if (item.root) applyPart(stats, item.root);
+    if (item.prePrefix) applyPart(stats, item.root);
+    if (item.postPrefix) applyPart(stats, item.root);
+    if (item.suffix) applyPart(stats, item.suffix);
+    if (item.prefixes) {
+        for (const prefix of item.prefixes) applyPart(stats, prefix);
+    }
+}
+
+function blankStats(): AdvancedStats {
+    // TODO: make the types here less horrible
+    const obj: Record<string, number> = {};
+    for (const stat of statIndices) obj[stat] = 0;
+    // also need suppression here as a zero since that's not in the list??
+    obj["suppression"] = 0;
+    return (obj as unknown) as AdvancedStats;
+}
+
+function getItemStats(items: PlayerItem[]): AdvancedStats {
+    const stats = blankStats();
+    for (const item of items)
+        applyItemStats((stats as unknown) as AdvancedStats, item);
+    return (stats as unknown) as AdvancedStats;
+}
+
+function extractPlayerStats(player: BlaseballPlayer): AdvancedStats {
+    return {
+        buoyancy: player.buoyancy,
+        divinity: player.divinity,
+        martyrdom: player.martyrdom,
+        moxie: player.moxie,
+        musclitude: player.musclitude,
+        patheticism: player.patheticism,
+        thwackability: player.thwackability,
+        tragicness: player.tragicness,
+        coldness: player.coldness,
+        overpowerment: player.overpowerment,
+        ruthlessness: player.ruthlessness,
+        shakespearianism: player.shakespearianism,
+        suppression: player.suppression,
+        unthwackability: player.unthwackability,
+        baseThirst: player.baseThirst,
+        continuation: player.continuation,
+        groundFriction: player.groundFriction,
+        indulgence: player.indulgence,
+        laserlikeness: player.laserlikeness,
+        anticapitalism: player.anticapitalism,
+        chasiness: player.chasiness,
+        omniscience: player.omniscience,
+        tenaciousness: player.tenaciousness,
+        watchfulness: player.watchfulness,
+        pressurization: player.pressurization ?? 0,
+        cinnamon: player.cinnamon ?? 0,
+    };
 }

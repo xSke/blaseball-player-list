@@ -1,20 +1,63 @@
-import { Player } from "../../models/Player";
+import clsx from "clsx";
+import { Player, StatName } from "../../models/Player";
 import { CellComponent, CellProps } from "./columns";
+import React from "react";
+import Tooltip from "rc-tooltip";
+import { useAppSelector } from "../../hooks";
 
-export function NumericStat(props: {
-    value: number;
-    tiers?: number[];
-    inverse?: boolean;
-}): JSX.Element {
-    const tiers = props.tiers ?? attrTiers;
-    const value = props.inverse ? 1 - props.value : props.value;
-    const tier = getTier(value, tiers);
+export function advancedStat(
+    stat: StatName,
+    tiers?: number[],
+    inverse?: boolean
+): CellComponent {
+    const actualTiers = tiers ?? attrTiers;
 
-    return (
-        <td className={`numeric-stat numeric-stat-${tier}`}>
-            {props.value.toFixed(3)}
-        </td>
-    );
+    function Cell(props: CellProps): JSX.Element {
+        const applyItemAdjustments = useAppSelector(
+            (state) => state.tableOptions.applyItemAdjustments
+        );
+
+        const baseValue = props.player.stats[stat];
+        if (baseValue === null) return <td className="numeric-stat">-</td>;
+        const itemAdj = applyItemAdjustments ? props.player.itemStats[stat] : 0;
+        const value = baseValue + itemAdj;
+
+        const tierValue = inverse ? 1 - value : value;
+        const tier = getTier(tierValue, actualTiers);
+
+        const hasItem = itemAdj != 0;
+
+        const inner = (
+            <td
+                className={clsx(
+                    "numeric-stat",
+                    `numeric-stat-${tier}`,
+                    hasItem && "numeric-stat-item"
+                )}
+            >
+                {value.toFixed(3)}
+            </td>
+        );
+
+        if (hasItem)
+            return (
+                <Tooltip
+                    placement="top"
+                    overlay={
+                        <span>
+                            {`Item: ${itemAdj > 0 ? "+" : ""}${itemAdj.toFixed(
+                                3
+                            )}`}
+                        </span>
+                    }
+                >
+                    {inner}
+                </Tooltip>
+            );
+        else return inner;
+    }
+
+    return Cell;
 }
 
 export function numericStat(

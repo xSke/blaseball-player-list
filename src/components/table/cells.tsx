@@ -86,12 +86,12 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
         "Sunglasses" : "🕶️",
     };
     console.log();
-    // console.log(playerItems);
-    return playerItems.length > 0 ? (
+    const itemAmnt = (playerItems ? playerItems.length : 0);
+    return itemAmnt > 0 ? (
         <td>
-            {playerItems.map(item => rootNameMap[item.root.name])}
+            {playerItems?.map(item => rootNameMap[item.root.name])}
             <button onClick={() => dispatch(toggle(props.player.id))} className="btn item-btn">
-                ▾
+                {showItems ? "▴" : "▾"}
             </button>
         </td>
     ) : (

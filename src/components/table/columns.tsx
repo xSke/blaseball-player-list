@@ -1,12 +1,11 @@
 import { TableOptionsSlice } from "../../store/tableOptionsSlice";
 import { positionSortKey as getPositionSortKey } from "../../utils";
 import { PlayerName, PlayerPosition, PlayerTeam, PlayerItem } from "./cells";
-import { attrTiers, combinedStarTiers, numericStat, starTiers } from "./stats";
-import { BlaseballPlayer } from "../../api/types";
-import { Player, PlayerStars } from "../../models/Player";
+import { advancedStat, attrTiers, numericStat, starTiers } from "./stats";
+import { Player, PlayerStars, StatName } from "../../models/Player";
 
-export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
-    const cols = options.columns;
+export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
+    const cols = opts.columns;
 
     const groups: ColumnGroup[] = [
         {
@@ -41,8 +40,8 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                 star(
                     "Combined",
                     (s) => s.combined,
-                    options,
-                    options.showAdvancedStats,
+                    opts,
+                    opts.showAdvancedStats,
                     "🌟"
                 ),
             ],
@@ -53,103 +52,99 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                 star(
                     "Combined",
                     (s) => s.combined,
-                    options,
-                    options.showAdvancedStats,
+                    opts,
+                    opts.showAdvancedStats,
                     "🌟"
                 ),
                 star(
                     "Batting",
                     (s) => s.batting,
-                    options,
+                    opts,
                     !cols.batting,
                     "Batting"
                 ),
                 star(
                     "Pitching",
                     (s) => s.pitching,
-                    options,
+                    opts,
                     !cols.pitching,
                     "Pitching"
                 ),
                 star(
                     "Baserunning",
                     (s) => s.baserunning,
-                    options,
+                    opts,
                     !cols.baserunning,
                     "Baserunning"
                 ),
                 star(
                     "Defense",
                     (s) => s.defense,
-                    options,
+                    opts,
                     !cols.defense,
                     "Defense"
                 ),
             ],
-            hidden: options.showAdvancedStats,
+            hidden: opts.showAdvancedStats,
         },
         {
             name: "Batting",
             hidden: !cols.batting,
             columns: [
-                star("Batting", (s) => s.batting, options),
-                attr("Buoyancy", "buoy", (p) => p.buoyancy),
-                attr("Divinity", "divin", (p) => p.divinity),
-                attr("Martyrdom", "mrtyr", (p) => p.martyrdom),
-                attr("Moxie", "moxie", (p) => p.moxie),
-                attr("Musclitude", "muscl", (p) => p.musclitude),
-                attr("Patheticism", "path", (p) => p.patheticism, true),
-                attr("Thwackability", "thwck", (p) => p.thwackability),
-                attr("Tragicness", "tragc", (p) => p.tragicness, true),
+                star("Batting", (s) => s.batting, opts),
+                attr(opts, "Buoyancy", "buoy", "buoyancy"),
+                attr(opts, "Divinity", "divin", "divinity"),
+                attr(opts, "Martyrdom", "mrtyr", "martyrdom"),
+                attr(opts, "Moxie", "moxie", "moxie"),
+                attr(opts, "Musclitude", "muscl", "musclitude"),
+                attr(opts, "Patheticism", "path", "patheticism"),
+                attr(opts, "Thwackability", "thwck", "thwackability"),
+                attr(opts, "Tragicness", "tragc", "tragicness", true),
             ],
         },
         {
             name: "Pitching",
             hidden: !cols.pitching,
             columns: [
-                star("Pitching", (s) => s.pitching, options),
-                attr("Coldness", "cold", (p) => p.coldness),
-                attr("Overpowerment", "opw", (p) => p.overpowerment),
-                attr("Ruthlessness", "ruth", (p) => p.ruthlessness),
-                attr("Shakespearianism", "shakes", (p) => p.shakespearianism),
-                attr("Suppression", "supp", (p) => p.suppression),
-                attr("Unthwackability", "untwk", (p) => p.unthwackability),
+                star("Pitching", (s) => s.pitching, opts),
+                attr(opts, "Coldness", "cold", "coldness"),
+                attr(opts, "Overpowerment", "opw", "overpowerment"),
+                attr(opts, "Ruthlessness", "ruth", "ruthlessness"),
+                attr(opts, "Shakespearianism", "shakes", "shakespearianism"),
+                attr(opts, "Suppression", "supp", "suppression"),
+                attr(opts, "Unthwackability", "untwk", "unthwackability"),
             ],
         },
         {
             name: "Baserunning",
             hidden: !cols.baserunning,
             columns: [
-                star("Baserunning", (s) => s.baserunning, options),
-                attr("Base Thirst", "thrst", (p) => p.baseThirst),
-                attr("Continuation", "cont", (p) => p.continuation),
-                attr("Ground Friction", "fric", (p) => p.groundFriction),
-                attr("Indulgence", "indlg", (p) => p.indulgence),
-                attr("Laserlikeness", "laser", (p) => p.laserlikeness),
+                star("Baserunning", (s) => s.baserunning, opts),
+                attr(opts, "Base Thirst", "thrst", "baseThirst"),
+                attr(opts, "Continuation", "cont", "continuation"),
+                attr(opts, "Ground Friction", "fric", "groundFriction"),
+                attr(opts, "Indulgence", "indlg", "indulgence"),
+                attr(opts, "Laserlikeness", "laser", "laserlikeness"),
             ],
         },
         {
             name: "Defense",
             hidden: !cols.defense,
             columns: [
-                star("Defense", (s) => s.defense, options),
-                attr("Anticapitalism", "ancap", (p) => p.anticapitalism),
-                attr("Chasiness", "chase", (p) => p.chasiness),
-                attr("Omniscience", "omni", (p) => p.omniscience),
-                attr("Tenaciousness", "tenac", (p) => p.tenaciousness),
-                attr("Watchfulness", "watch", (p) => p.watchfulness),
+                star("Defense", (s) => s.defense, opts),
+                attr(opts, "Anticapitalism", "ancap", "anticapitalism"),
+                attr(opts, "Chasiness", "chase", "chasiness"),
+                attr(opts, "Omniscience", "omni", "omniscience"),
+                attr(opts, "Tenaciousness", "tenac", "tenaciousness"),
+                attr(opts, "Watchfulness", "watch", "watchfulness"),
             ],
         },
         {
             name: "Vibes",
             hidden: !cols.vibestats,
             columns: [
-                attr(
-                    "Pressurization",
-                    "press",
-                    (p) => p.pressurization ?? null
-                ),
-                attr("Cinnamon", "cinn", (p) => p.cinnamon ?? null),
+                attr(opts, "Pressurization", "press", "pressurization"),
+                attr(opts, "Cinnamon", "cinn", "cinnamon"),
             ],
         },
         {
@@ -163,7 +158,7 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                     render: ({ player }) => (
                         <td className="numeric-stat">{player.data.soul}</td>
                     ),
-                    hidden: !options.columns.misc,
+                    hidden: !opts.columns.misc,
                 },
                 {
                     id: "fate",
@@ -173,7 +168,7 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                     render: ({ player }) => (
                         <td className="numeric-stat">{player.data.fate}</td>
                     ),
-                    hidden: !options.columns.misc,
+                    hidden: !opts.columns.misc,
                 },
                 {
                     id: "fingers",
@@ -185,7 +180,7 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                             {player.data.totalFingers}
                         </td>
                     ),
-                    hidden: !options.columns.misc,
+                    hidden: !opts.columns.misc,
                 },
                 {
                     id: "allergy",
@@ -195,7 +190,7 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                     render: ({ player }) => (
                         <td>{player.data.peanutAllergy ? "🤢" : "😋"}</td>
                     ),
-                    hidden: !options.columns.misc,
+                    hidden: !opts.columns.misc,
                 },
                 {
                     id: "eDensity",
@@ -209,7 +204,7 @@ export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
                                 : "-"}
                         </td>
                     ),
-                    hidden: !options.columns.misc,
+                    hidden: !opts.columns.misc,
                 },
             ],
         },
@@ -269,21 +264,21 @@ function star(
 }
 
 function attr(
+    opts: TableOptionsSlice,
     name: string,
     shortname: string,
-    accessor: (p: BlaseballPlayer) => number | null,
+    stat: StatName,
     inverse = false
 ): Column {
-    const getter = (p: Player) => accessor(p.data);
     return {
         id: shortname,
         name: shortname,
         alt: name,
-        sortKey: getter,
-        render: numericStat(getter, attrTiers, inverse),
+        sortKey: (p) =>
+            p.stats[stat] + (opts.applyItemAdjustments ? p.itemStats[stat] : 0),
+        render: advancedStat(stat, attrTiers, inverse),
     };
 }
-
 export interface ColumnGroup {
     name: string;
     columns: Column[];

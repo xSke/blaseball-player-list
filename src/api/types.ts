@@ -44,8 +44,6 @@ export interface BlaseballPlayer {
     gameAttr?: string[];
     itemAttr?: string[];
 
-    items: Item[];
-
     deceased: boolean;
     soul: number;
     fate: number;
@@ -55,6 +53,7 @@ export interface BlaseballPlayer {
     blood: number;
     coffee: number;
     ritual: string;
+    items?: PlayerItem[];
 }
 
 export interface BlaseballTeam {
@@ -95,32 +94,36 @@ export interface PlayerMod {
     description: string;
 }
 
-export interface Item {
+export interface PlayerItem {
     id: string;
     name: string;
 
+    root: ItemPart;
+    suffix: ItemPart | null;
+    prePrefix: ItemPart | null;
+    postPrefix: ItemPart | null;
+    prefixes: ItemPart[];
+
+    hittingRating: number;
+    pitchingRating: number;
     baserunningRating: number;
     defenseRating: number;
-    pitchingRating: number;
-    hittingRating: number;
-
-    durability: number;
-    health: number;
-    forger?: any;
-    forgerName?: any;
-
-    postPrefix: any;
-    prePrefix: any;
-    prefixes: any;
-
-    root: {
-        name: string;
-        adjustments: Adjustment[];
-    }
 }
 
-export interface Adjustment {
+export interface ItemPart {
+    name: string;
+    adjustments: ItemAdjustment[];
+}
+
+export type ItemAdjustment = ItemModAdjustment | ItemStatAdjustment;
+
+export interface ItemModAdjustment {
+    type: 0;
+    mod: string;
+}
+
+export interface ItemStatAdjustment {
+    type: 1;
     stat: number;
-    type: number;
     value: number;
 }
