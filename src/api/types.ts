@@ -108,6 +108,9 @@ export interface PlayerItem {
     pitchingRating: number;
     baserunningRating: number;
     defenseRating: number;
+
+    health: number;
+    durability: number;
 }
 
 export interface ItemPart {

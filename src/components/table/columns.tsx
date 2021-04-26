@@ -44,6 +44,13 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
                     sortKey: (p) => getPositionSortKey(p),
                     hidden: !cols.position,
                 },
+                {
+                    id: "item",
+                    name: "Items",
+                    render: PlayerItem,
+                    sortKey: (p) => (p.data.items ? p.data.items.length : 0),
+                    hidden: !cols.items,
+                },
                 star(
                     "Combined",
                     (s) => s.combined,
