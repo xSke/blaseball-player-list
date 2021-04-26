@@ -25,12 +25,6 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
                     sortKey: (p) => p.data.name,
                 },
                 {
-                    id: "item",
-                    name: "Items",
-                    render: PlayerItem,
-                    sortKey: (p) => p.data.items ? p.data.items.length : 0
-                },
-                {
                     id: "team",
                     name: "Team",
                     render: PlayerTeam,
@@ -43,6 +37,13 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
                     render: PlayerPosition,
                     sortKey: (p) => getPositionSortKey(p),
                     hidden: !cols.position,
+                },
+                {
+                    id: "item",
+                    name: "Items",
+                    render: PlayerItem,
+                    sortKey: (p) => (p.data.items ? p.data.items.length : 0),
+                    hidden: !cols.items,
                 },
                 star(
                     "Combined",

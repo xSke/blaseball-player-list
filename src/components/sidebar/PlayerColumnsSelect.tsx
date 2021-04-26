@@ -13,6 +13,7 @@ export function PlayerColumnsSelect(): JSX.Element {
             <div className="form-label">Show columns</div>
             <ColumnCheckbox column="team">Team</ColumnCheckbox>
             <ColumnCheckbox column="position">Position</ColumnCheckbox>
+            <ColumnCheckbox column="items">Items</ColumnCheckbox>
             <ColumnCheckbox column="batting">Batting</ColumnCheckbox>
             <ColumnCheckbox column="pitching">Pitching</ColumnCheckbox>
             <ColumnCheckbox column="baserunning">Baserunning</ColumnCheckbox>

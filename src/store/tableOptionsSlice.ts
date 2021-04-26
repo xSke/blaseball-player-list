@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type ListColumn =
     | "team"
     | "position"
+    | "items"
     | "batting"
     | "pitching"
     | "baserunning"
@@ -21,11 +22,12 @@ const initialState = {
     columns: {
         team: true,
         position: true,
+        items: false,
         batting: true,
         pitching: true,
         baserunning: true,
         defense: true,
-        vibestats: true,
+        vibestats: false,
         misc: true,
     },
     applyItemAdjustments: true,

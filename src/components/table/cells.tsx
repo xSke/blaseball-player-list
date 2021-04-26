@@ -1,7 +1,5 @@
 import { Player, RosterEntry } from "../../models/Player";
 import { parseEmoji } from "../../utils";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { toggle } from "../../store/playerItemSlice";
 
 export function PlayerName(props: { player: Player }): JSX.Element {
     const id = props.player.id;
@@ -65,33 +63,36 @@ export function PlayerPosition(props: { player: Player }): JSX.Element {
 }
 
 export function PlayerItem(props: { player: Player }): JSX.Element {
-    const dispatch = useAppDispatch();
-    const toShow = useAppSelector((state) => state.playerItems.toShow);
-    const showItems = toShow.includes(props.player.id);
+    // const dispatch = useAppDispatch();
+    // const toShow = useAppSelector((state) => state.playerItems.toShow);
+    // const showItems = toShow.includes(props.player.id);
 
     const playerItems = props.player.data.items;
     type itemMap = {
-        [key: string] : string
+        [key: string]: string;
     };
-    const rootNameMap : itemMap = {
-        "Bat" : "🏏",
-        "Board" : "🛹",
-        "Cap" : "🧢",
-        "Field" : "🔵",
-        "Glove" : "🧤",
-        "Jersey" : "👕",
-        "Necklace" : "📿",
-        "Ring" : "💍",
-        "Shoes" : "👟",
-        "Sunglasses" : "🕶️",
+    const rootNameMap: itemMap = {
+        Bat: "🏏",
+        Board: "🛹",
+        Cap: "🧢",
+        Field: "🔵",
+        Glove: "🧤",
+        Jersey: "👕",
+        Necklace: "📿",
+        Ring: "💍",
+        Shoes: "👟",
+        Sunglasses: "🕶️",
     };
-    const itemAmnt = (playerItems ? playerItems.length : 0);
+    const itemAmnt = playerItems ? playerItems.length : 0;
     return itemAmnt > 0 ? (
         <td>
-            {playerItems?.map(item => rootNameMap[item.root.name])}
-            <button onClick={() => dispatch(toggle(props.player.id))} className="btn item-btn">
+            {playerItems?.map((item) => rootNameMap[item.root.name])}
+            {/* <button
+                onClick={() => dispatch(toggle(props.player.id))}
+                className="btn item-btn"
+            >
                 {showItems ? "▴" : "▾"}
-            </button>
+            </button> */}
         </td>
     ) : (
         <td>-</td>
