@@ -1,8 +1,15 @@
 import { TableOptionsSlice } from "../../store/tableOptionsSlice";
 import { positionSortKey as getPositionSortKey } from "../../utils";
 import { PlayerName, PlayerPosition, PlayerTeam } from "./cells";
-import { advancedStat, attrTiers, numericStat, starTiers } from "./stats";
-import { Player, PlayerStars, StatName } from "../../models/Player";
+import {
+    advancedStat,
+    attrTiers,
+    combinedStarTiers,
+    starStat,
+    starTiers,
+} from "./stats";
+import { Player, PlayerStars } from "../../models/Player";
+import { StatName } from "../../models/AdvancedStats";
 
 export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
     const cols = opts.columns;
@@ -35,8 +42,9 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
                     "Combined",
                     (s) => s.combined,
                     opts,
-                    opts.showAdvancedStats,
-                    "🌟"
+                    !opts.showAdvancedStats,
+                    "🌟",
+                    combinedStarTiers
                 ),
             ],
         },
@@ -48,7 +56,8 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
                     (s) => s.combined,
                     opts,
                     opts.showAdvancedStats,
-                    "🌟"
+                    "🌟",
+                    combinedStarTiers
                 ),
                 star(
                     "Batting",
@@ -83,7 +92,7 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
         },
         {
             name: "Batting",
-            hidden: !cols.batting,
+            hidden: !opts.showAdvancedStats || !cols.batting,
             columns: [
                 star("Batting", (s) => s.batting, opts),
                 attr(opts, "Buoyancy", "buoy", "buoyancy"),
@@ -91,14 +100,14 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
                 attr(opts, "Martyrdom", "mrtyr", "martyrdom"),
                 attr(opts, "Moxie", "moxie", "moxie"),
                 attr(opts, "Musclitude", "muscl", "musclitude"),
-                attr(opts, "Patheticism", "path", "patheticism"),
+                attr(opts, "Patheticism", "path", "patheticism", true),
                 attr(opts, "Thwackability", "thwck", "thwackability"),
                 attr(opts, "Tragicness", "tragc", "tragicness", true),
             ],
         },
         {
             name: "Pitching",
-            hidden: !cols.pitching,
+            hidden: !opts.showAdvancedStats || !cols.pitching,
             columns: [
                 star("Pitching", (s) => s.pitching, opts),
                 attr(opts, "Coldness", "cold", "coldness"),
@@ -111,7 +120,7 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
         },
         {
             name: "Baserunning",
-            hidden: !cols.baserunning,
+            hidden: !opts.showAdvancedStats || !cols.baserunning,
             columns: [
                 star("Baserunning", (s) => s.baserunning, opts),
                 attr(opts, "Base Thirst", "thrst", "baseThirst"),
@@ -123,7 +132,7 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
         },
         {
             name: "Defense",
-            hidden: !cols.defense,
+            hidden: !opts.showAdvancedStats || !cols.defense,
             columns: [
                 star("Defense", (s) => s.defense, opts),
                 attr(opts, "Anticapitalism", "ancap", "anticapitalism"),
@@ -135,7 +144,7 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
         },
         {
             name: "Vibes",
-            hidden: !cols.vibestats,
+            hidden: !opts.showAdvancedStats || !cols.vibestats,
             columns: [
                 attr(opts, "Pressurization", "press", "pressurization"),
                 attr(opts, "Cinnamon", "cinn", "cinnamon"),
@@ -244,15 +253,18 @@ function star(
     accessor: (s: PlayerStars) => number,
     options: TableOptionsSlice,
     hidden = false,
-    display = "⭐"
+    display = "⭐",
+    tiers = starTiers
 ): Column {
-    const getter = (p: Player) => accessor(p.stars(options.useRealStars));
+    const sortGetter = (p: Player) =>
+        accessor(p.stars(options.useRealStars, options.applyItemAdjustments));
+
     return {
         id: `${name}Stars`,
         name: display,
         alt: `${name} Stars`,
-        sortKey: getter,
-        render: numericStat(getter, starTiers),
+        sortKey: sortGetter,
+        render: starStat(accessor, tiers),
         hidden,
     };
 }
@@ -269,7 +281,8 @@ function attr(
         name: shortname,
         alt: name,
         sortKey: (p) =>
-            p.stats[stat] + (opts.applyItemAdjustments ? p.itemStats[stat] : 0),
+            p.stats.get(stat) +
+            (opts.applyItemAdjustments ? p.itemStats.get(stat) : 0),
         render: advancedStat(stat, attrTiers, inverse),
     };
 }

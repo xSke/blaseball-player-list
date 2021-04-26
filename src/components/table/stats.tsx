@@ -1,83 +1,101 @@
 import clsx from "clsx";
-import { Player, StatName } from "../../models/Player";
+import { PlayerStars } from "../../models/Player";
 import { CellComponent, CellProps } from "./columns";
 import React from "react";
 import Tooltip from "rc-tooltip";
 import { useAppSelector } from "../../hooks";
+import { StatName } from "../../models/AdvancedStats";
+
+function NumericStat(props: {
+    value: number | null;
+    itemValue: number | null;
+    tiers: number[];
+    inverse: boolean;
+}) {
+    if (props.value === null) return <td className="numeric-stat">-</td>;
+
+    const applyItemAdjustments = useAppSelector(
+        (state) => state.tableOptions.applyItemAdjustments
+    );
+
+    const itemValue =
+        applyItemAdjustments && props.itemValue ? props.itemValue ?? 0 : 0;
+    const value = props.value + itemValue;
+    const tier = getTier(value, props.tiers, props.inverse);
+
+    const tableCell = (
+        <td
+            className={clsx(
+                "numeric-stat",
+                `numeric-stat-${tier}`,
+                itemValue && "numeric-stat-item"
+            )}
+        >
+            {value.toFixed(3)}
+        </td>
+    );
+
+    if (itemValue) {
+        const prefix = `Item: ${itemValue > 0 ? "+" : ""}`;
+        return (
+            <Tooltip
+                placement="top"
+                overlay={
+                    <span>
+                        {prefix}
+                        {itemValue.toFixed(3)}
+                    </span>
+                }
+            >
+                {tableCell}
+            </Tooltip>
+        );
+    } else {
+        return tableCell;
+    }
+}
 
 export function advancedStat(
     stat: StatName,
     tiers?: number[],
     inverse?: boolean
 ): CellComponent {
-    const actualTiers = tiers ?? attrTiers;
+    function Cell(props: CellProps) {
+        const value = props.player.stats.get(stat);
+        const itemValue = props.player.itemStats.get(stat);
 
-    function Cell(props: CellProps): JSX.Element {
-        const applyItemAdjustments = useAppSelector(
-            (state) => state.tableOptions.applyItemAdjustments
+        return (
+            <NumericStat
+                value={value}
+                itemValue={itemValue}
+                tiers={tiers ?? attrTiers}
+                inverse={inverse ?? false}
+            />
         );
-
-        const baseValue = props.player.stats[stat];
-        if (baseValue === null) return <td className="numeric-stat">-</td>;
-        const itemAdj = applyItemAdjustments ? props.player.itemStats[stat] : 0;
-        const value = baseValue + itemAdj;
-
-        const tierValue = inverse ? 1 - value : value;
-        const tier = getTier(tierValue, actualTiers);
-
-        const hasItem = itemAdj != 0;
-
-        const inner = (
-            <td
-                className={clsx(
-                    "numeric-stat",
-                    `numeric-stat-${tier}`,
-                    hasItem && "numeric-stat-item"
-                )}
-            >
-                {value.toFixed(3)}
-            </td>
-        );
-
-        if (hasItem)
-            return (
-                <Tooltip
-                    placement="top"
-                    overlay={
-                        <span>
-                            {`Item: ${itemAdj > 0 ? "+" : ""}${itemAdj.toFixed(
-                                3
-                            )}`}
-                        </span>
-                    }
-                >
-                    {inner}
-                </Tooltip>
-            );
-        else return inner;
     }
 
     return Cell;
 }
 
-export function numericStat(
-    accessor: (p: Player) => number | null,
-    tiers?: number[],
-    inverse?: boolean
+export function starStat(
+    accessor: (stars: PlayerStars) => number,
+    tiers: number[]
 ): CellComponent {
-    const actualTiers = tiers ?? attrTiers;
-
     function Cell(props: CellProps) {
-        const value = accessor(props.player);
-        if (value === null) return <td className="numeric-stat">-</td>;
+        const useRealStars = useAppSelector(
+            (state) => state.tableOptions.useRealStars
+        );
 
-        const tierValue = inverse ? 1 - value : value;
-        const tier = getTier(tierValue, actualTiers);
+        const value = accessor(props.player.stars(useRealStars));
+        const itemValue = accessor(props.player.itemStars);
 
         return (
-            <td className={`numeric-stat numeric-stat-${tier}`}>
-                {value.toFixed(3)}
-            </td>
+            <NumericStat
+                value={value}
+                itemValue={itemValue}
+                tiers={tiers}
+                inverse={false}
+            />
         );
     }
 
@@ -88,9 +106,10 @@ export const attrTiers = [0.125, 0.35, 0.45, 0.75, 1.0];
 export const starTiers = [1, 2, 3, 4, 5];
 export const combinedStarTiers = [4, 8, 12, 16, 20];
 
-function getTier(value: number, tiers: number[]): number {
+function getTier(value: number, tiers: number[], inverse: boolean): number {
+    const tierValue = inverse ? 1 - value : value;
     for (let i = 0; i < tiers.length; i++) {
-        if (value < tiers[i]) return i;
+        if (tierValue < tiers[i]) return i;
     }
     return tiers.length;
 }
