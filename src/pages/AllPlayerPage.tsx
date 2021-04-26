@@ -4,7 +4,8 @@ import { PlayerTable } from "../components/table/PlayerTable";
 import { PlayerFilterSlice } from "../store/playerFilterSlice";
 import { useAppSelector } from "../hooks";
 import { PlayerMeta, RosterEntry } from "../types";
-import { useLeagueData } from "../fetchhooks";
+import { useLeagueData } from "../api/fetchhooks";
+import { getPlayerStatus } from "../players";
 
 function AllPlayerPage(): JSX.Element {
     const data = useLeagueData();
@@ -35,6 +36,8 @@ function applyPlayerFilter(
         if (!matchMods(p.modifiers, options.mods)) return false;
         if (!matchPositions(p.mainTeam?.position, options.positions))
             return false;
+        if (!matchStatus(getPlayerStatus(p), options.statuses)) return false;
+
         return true;
     });
 }
@@ -67,6 +70,12 @@ function matchPositions(
     if (!filterPositions.length) return true;
     if (!position) return false;
     return filterPositions.indexOf(position) > -1;
+}
+
+function matchStatus(status: string | undefined, filterStatus: string[]) {
+    if (!filterStatus.length) return true;
+    if (!status) return false;
+    return filterStatus.indexOf(status) > -1;
 }
 
 export default AllPlayerPage;

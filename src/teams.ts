@@ -1,4 +1,4 @@
-import { BlaseballTeam } from "./types";
+import { BlaseballTeam } from "./api/types";
 
 export type TeamType = "league" | "coffee" | "special" | "deprecated";
 
@@ -46,11 +46,11 @@ export const coffeeTeamIds = [
 ];
 
 export const specialTeamIds = [
-    "d2634113-b650-47b9-ad95-673f8e28e687",
-    "3b0a289b-aebd-493c-bc11-96793e7216d5",
-    "7fcb63bc-11f2-40b9-b465-f1d458692a63",
-    "c6c01051-cdd4-47d6-8a98-bb5b754f937f",
-    "40b9ec2a-cb43-4dbb-b836-5accb62e7c20",
+    "d2634113-b650-47b9-ad95-673f8e28e687", // Data Witches
+    "3b0a289b-aebd-493c-bc11-96793e7216d5", // Artists
+    "7fcb63bc-11f2-40b9-b465-f1d458692a63", // Game Band
+    "c6c01051-cdd4-47d6-8a98-bb5b754f937f", // Hall Stars
+    "40b9ec2a-cb43-4dbb-b836-5accb62e7c20", // PODS
 ];
 
 export function sortTeams(teams: BlaseballTeam[]): BlaseballTeam[] {

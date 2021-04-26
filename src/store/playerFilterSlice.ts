@@ -5,6 +5,7 @@ export interface PlayerFilterSlice {
     teams: string[];
     mods: string[];
     positions: string[];
+    statuses: string[];
 }
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
     teams: [],
     mods: [],
     positions: [],
+    statuses: [],
 } as PlayerFilterSlice;
 
 export const playerFilterSlice = createSlice({
@@ -30,6 +32,9 @@ export const playerFilterSlice = createSlice({
         setPositions: (state, action: PayloadAction<string[]>) => {
             state.positions = action.payload;
         },
+        setStatuses: (state, action: PayloadAction<string[]>) => {
+            state.statuses = action.payload;
+        },
     },
 });
 
@@ -38,4 +43,5 @@ export const {
     setTeams,
     setMods,
     setPositions,
+    setStatuses,
 } = playerFilterSlice.actions;

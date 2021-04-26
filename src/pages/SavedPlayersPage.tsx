@@ -1,6 +1,6 @@
 import React from "react";
 import { PlayerTable } from "../components/table/PlayerTable";
-import { useLeagueData } from "../fetchhooks";
+import { useLeagueData } from "../api/fetchhooks";
 import { useAppSelector } from "../hooks";
 
 function SavedPlayersPage(): JSX.Element {

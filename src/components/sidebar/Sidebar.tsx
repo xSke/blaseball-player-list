@@ -5,7 +5,7 @@ import Nav from "./Nav";
 import PlayerFilterSelect from "./PlayerFilterSelect";
 import { PlayerColumnsSelect } from "./PlayerColumnsSelect";
 import { TeamSelect } from "./TeamSelect";
-import { useTeamData } from "../../fetchhooks";
+import { useTeamData } from "../../api/fetchhooks";
 
 function Sidebar(): JSX.Element {
     return (

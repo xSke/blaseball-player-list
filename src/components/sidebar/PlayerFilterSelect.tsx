@@ -3,6 +3,7 @@ import {
     setMods,
     setPositions,
     setSearch,
+    setStatuses,
     setTeams,
 } from "../../store/playerFilterSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -17,6 +18,7 @@ function PlayerFilterSelect(): JSX.Element {
             <ModifierFilter />
             <PositionFilter />
             <TeamFilter />
+            <StatusFilter />
         </div>
     );
 }
@@ -99,6 +101,32 @@ function ModifierFilter() {
                 id="player-mods"
                 mods={selected}
                 setMods={(newMods) => dispatch(setMods(newMods))}
+            />
+        </div>
+    );
+}
+
+function StatusFilter() {
+    const dispatch = useAppDispatch();
+
+    return (
+        <div className="mb-3">
+            <label htmlFor="player-status" className="form-label">
+                Status
+            </label>
+            <Select
+                id="player-status"
+                isMulti
+                options={[
+                    { value: "active", label: "Active" },
+                    { value: "deceased", label: "Deceased" },
+                    { value: "retired", label: "Retired" },
+                    { value: "exhibition", label: "Exhibition" },
+                ]}
+                onChange={(newItems) => {
+                    const statuses = newItems.map((item) => item.value);
+                    dispatch(setStatuses(statuses));
+                }}
             />
         </div>
     );

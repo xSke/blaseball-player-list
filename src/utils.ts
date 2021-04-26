@@ -1,4 +1,5 @@
-import { ChroniclerTeam, PlayerMeta, RosterEntry, TeamPosition } from "./types";
+import { ChroniclerTeam } from "./api/types";
+import { PlayerMeta, RosterEntry, TeamPosition } from "./types";
 
 export function generatePlayerTeamMap(
     teams: ChroniclerTeam[]

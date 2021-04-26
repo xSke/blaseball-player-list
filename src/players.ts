@@ -1,11 +1,6 @@
+import { BlaseballPlayer, BlaseballTeam, ChroniclerPlayer } from "./api/types";
 import { getTeamType } from "./teams";
-import {
-    BlaseballPlayer,
-    BlaseballTeam,
-    ChroniclerPlayer,
-    PlayerMeta,
-    RosterEntry,
-} from "./types";
+import { PlayerMeta, RosterEntry } from "./types";
 
 export function getBattingStars(player: BlaseballPlayer): number {
     return (
@@ -150,6 +145,32 @@ export function getPlayerMeta(
         mainTeam,
         mainTeamData: mainTeam ? teams[mainTeam.teamId] : null,
     };
+}
+
+export type PlayerStatus =
+    | "active"
+    | "deprecated"
+    | "deceased"
+    | "retired"
+    | "exhibition";
+
+export function getPlayerStatus(meta: PlayerMeta): PlayerStatus {
+    const team = meta.mainTeam?.teamId ?? "";
+
+    if (meta.id === "bc4187fa-459a-4c06-bbf2-4e0e013d27ce") return "deprecated"; // (hi sixpack)
+    if (meta.player.deceased) return "deceased";
+    if (hasModifier(meta, "RETIRED", "STATIC")) return "retired";
+
+    if (team === "d2634113-b650-47b9-ad95-673f8e28e687") return "exhibition";
+    if (team === "3b0a289b-aebd-493c-bc11-96793e7216d5") return "exhibition";
+    if (team === "7fcb63bc-11f2-40b9-b465-f1d458692a63") return "exhibition";
+    if (hasModifier(meta, "COFFEE_EXIT")) return "exhibition";
+
+    return "active";
+}
+
+export function hasModifier(meta: PlayerMeta, ...mods: string[]): boolean {
+    return mods.some((m) => meta.modifiers.includes(m));
 }
 
 export const bloodTypes = [

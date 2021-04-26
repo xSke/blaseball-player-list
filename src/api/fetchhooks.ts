@@ -1,15 +1,9 @@
 import { useMemo } from "react";
 import useSWR from "swr";
-import { getAllModIds, getPlayerMeta } from "./players";
-import {
-    BlaseballTeam,
-    ChroniclerPlayer,
-    ChroniclerTeam,
-    PlayerMeta,
-    PlayerMod,
-    RosterEntry,
-} from "./types";
-import { generatePlayerTeamMap } from "./utils";
+import { BlaseballTeam, ChroniclerPlayer, ChroniclerTeam } from "./types";
+import { getAllModIds, getPlayerMeta } from "../players";
+import { PlayerMeta, PlayerMod, RosterEntry } from "../types";
+import { generatePlayerTeamMap } from "../utils";
 
 export interface LeagueData {
     players: Record<string, PlayerMeta>;

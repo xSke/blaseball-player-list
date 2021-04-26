@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { BlaseballPlayer, PlayerMeta } from "../../types";
+import { PlayerMeta } from "../../types";
 import Pagination from "../Pagination";
 import { ColumnGroup, getColumns } from "./columns";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { save, unsave } from "../../store/savedPlayersSlice";
+import { BlaseballPlayer } from "../../api/types";
 
 export type SortKeyGetter = (
     p: BlaseballPlayer,

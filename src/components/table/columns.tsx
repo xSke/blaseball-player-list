@@ -15,10 +15,11 @@ import {
     getCombinedFakeStars,
     getCombinedStars,
 } from "../../players";
-import { BlaseballPlayer, PlayerMeta } from "../../types";
+import { PlayerMeta } from "../../types";
 import { positionSortKey as getPositionSortKey } from "../../utils";
 import { PlayerName, PlayerPosition, PlayerTeam } from "./cells";
 import { attrTiers, combinedStarTiers, numericStat, starTiers } from "./stats";
+import { BlaseballPlayer } from "../../api/types";
 
 export function getColumns(options: TableOptionsSlice): ColumnGroup[] {
     const combinedStarGetter = options.useRealStars

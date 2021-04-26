@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
 import { PlayerTable } from "../components/table/PlayerTable";
-import { useLeagueData } from "../fetchhooks";
+import { useLeagueData } from "../api/fetchhooks";
 
 function SingleTeamPage(): JSX.Element {
     const { abbr } = useParams<{ abbr: string }>();

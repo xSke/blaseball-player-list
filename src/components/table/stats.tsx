@@ -1,4 +1,4 @@
-import { BlaseballPlayer } from "../../types";
+import { BlaseballPlayer } from "../../api/types";
 import { CellComponent, CellProps } from "./columns";
 
 export function NumericStat(props: {

@@ -1,5 +1,5 @@
 import Select from "react-select";
-import { useAllModifiers } from "../../fetchhooks";
+import { useAllModifiers } from "../../api/fetchhooks";
 
 function ModifierSelect(props: {
     id: string;

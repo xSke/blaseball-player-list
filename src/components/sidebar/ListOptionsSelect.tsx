@@ -13,7 +13,7 @@ function ListOptionsSelect(): JSX.Element {
     return (
         <div className="mb-4">
             <CheckboxOption
-                id="Show advanced stats"
+                id="advanced-stats"
                 value={opts.showAdvancedStats}
                 setValue={(val) => dispatch(setShowAdvancedStats(val))}
             >

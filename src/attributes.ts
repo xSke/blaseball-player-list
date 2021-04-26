@@ -1,10 +1,10 @@
+import { BlaseballPlayer } from "./api/types";
 import {
     getBaserunningStars,
     getBattingStars,
     getDefenseStars,
     getPitchingStars,
 } from "./players";
-import { BlaseballPlayer } from "./types";
 
 export interface Attribute {
     name: string;

@@ -1,12 +1,12 @@
 import Select from "react-select";
-import { useTeamData } from "../../fetchhooks";
+import { BlaseballTeam } from "../../api/types";
+import { useTeamData } from "../../api/fetchhooks";
 import {
     coffeeTeamIds,
     ilbTeamIds,
     sortTeams,
     specialTeamIds,
 } from "../../teams";
-import { BlaseballTeam } from "../../types";
 import { parseEmoji } from "../../utils";
 
 export function TeamSelect(props: {
