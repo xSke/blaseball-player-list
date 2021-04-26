@@ -100,6 +100,10 @@ interface TableRowProps {
 }
 
 function TableRow(props: TableRowProps) {
+    // These can be used to know whether to display the items or not.
+    // const toShow = useAppSelector((state) => state.playerItems.toShow);
+    // const showItems = toShow.includes(props.player.id);
+
     return (
         <tr>
             <SaveCheckbox id={props.player.id} />
