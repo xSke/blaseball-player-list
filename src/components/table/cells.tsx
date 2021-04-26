@@ -1,8 +1,6 @@
 import { Player, RosterEntry } from "../../models/Player";
 import { parseEmoji } from "../../utils";
-import { useAppDispatch, useAppSelector } from "../../hooks";
 import Tooltip from "rc-tooltip";
-import { toggle } from "../../store/playerItemSlice";
 
 export function PlayerName(props: { player: Player }): JSX.Element {
     const id = props.player.id;
