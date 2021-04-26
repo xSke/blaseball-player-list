@@ -1,5 +1,5 @@
-import { BlaseballPlayer, ItemPart, PlayerItem } from "../api/types";
-import { PlayerStars } from "./Player";
+import { BlaseballPlayer } from "../api/types";
+import { Stars } from "./Stars";
 
 export type StatName =
     | "tragicness"
@@ -30,7 +30,7 @@ export type StatName =
     | "chasiness";
 
 export class AdvancedStats {
-    private constructor(private data: Record<StatName, number>) {}
+    constructor(private data: Record<StatName, number>) {}
 
     static new(): AdvancedStats {
         const record: Partial<Record<StatName, number>> = {};
@@ -47,18 +47,6 @@ export class AdvancedStats {
         return new AdvancedStats(stats);
     }
 
-    static fromItems(items: PlayerItem[]): AdvancedStats {
-        const stats = AdvancedStats.new();
-        for (const item of items) stats.addItem(item);
-        return stats;
-    }
-
-    static fromItem(item: PlayerItem): AdvancedStats {
-        const stats = AdvancedStats.new();
-        stats.addItem(item);
-        return stats;
-    }
-
     get(id: StatName): number {
         return this.data[id];
     }
@@ -69,38 +57,12 @@ export class AdvancedStats {
         return result;
     }
 
-    private addItem(item: PlayerItem) {
-        // ignore broken item
-        if (item.health === 0 && item.durability !== -1) return;
-
-        // mutable...
-        function applyPart(stats: AdvancedStats, part: ItemPart) {
-            for (const adj of part.adjustments) {
-                if (adj.type === 1) {
-                    const stat = statIndices[adj.stat];
-
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    stats.data[stat] += adj.value;
-                }
-            }
-        }
-
-        if (item.root) applyPart(this, item.root);
-        if (item.prePrefix) applyPart(this, item.root);
-        if (item.postPrefix) applyPart(this, item.root);
-        if (item.suffix) applyPart(this, item.suffix);
-        if (item.prefixes) {
-            for (const prefix of item.prefixes) applyPart(this, prefix);
-        }
-    }
-
-    stars(): PlayerStars {
+    stars(): Stars {
         const batting = this.battingStars();
         const pitching = this.pitchingStars();
         const baserunning = this.baserunningStars();
         const defense = this.defenseStars();
-        const combined = batting + pitching + baserunning + defense;
-        return { batting, pitching, baserunning, defense, combined };
+        return new Stars(batting, pitching, baserunning, defense);
     }
 
     battingStars(): number {
@@ -152,7 +114,7 @@ export class AdvancedStats {
     }
 }
 
-const statIndices: StatName[] = [
+export const statIndices: StatName[] = [
     "tragicness",
     "buoyancy",
     "thwackability",

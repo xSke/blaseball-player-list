@@ -8,8 +8,9 @@ import {
     starStat,
     starTiers,
 } from "./stats";
-import { Player, PlayerStars } from "../../models/Player";
+import { Player } from "../../models/Player";
 import { StatName } from "../../models/AdvancedStats";
+import { Stars } from "../../models/Stars";
 
 export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
     const cols = opts.columns;
@@ -257,7 +258,7 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
 
 function star(
     name: string,
-    accessor: (s: PlayerStars) => number,
+    accessor: (s: Stars) => number,
     options: TableOptionsSlice,
     hidden = false,
     display = "⭐",

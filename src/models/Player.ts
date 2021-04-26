@@ -1,11 +1,8 @@
-import {
-    BlaseballPlayer,
-    BlaseballTeam,
-    ChroniclerPlayer,
-    PlayerItem,
-} from "../api/types";
+import { BlaseballPlayer, BlaseballTeam, ChroniclerPlayer } from "../api/types";
 import { getTeamType } from "../teams";
 import { AdvancedStats } from "./AdvancedStats";
+import { Item } from "./Item";
+import { Stars } from "./Stars";
 
 export type TeamPosition = "lineup" | "rotation" | "shadows";
 
@@ -23,14 +20,6 @@ export type PlayerStatus =
     | "retired"
     | "exhibition";
 
-export interface PlayerStars {
-    combined: number;
-    batting: number;
-    pitching: number;
-    baserunning: number;
-    defense: number;
-}
-
 export class Player {
     public readonly id: string;
     public readonly data: BlaseballPlayer;
@@ -43,7 +32,9 @@ export class Player {
     public readonly stats: AdvancedStats;
     public readonly itemStats: AdvancedStats;
     public readonly adjustedStats: AdvancedStats;
-    public readonly itemStars: PlayerStars;
+    public readonly itemStars: Stars;
+
+    public readonly items: Item[];
 
     constructor(
         player: ChroniclerPlayer,
@@ -60,9 +51,15 @@ export class Player {
         this.mods = extractPlayerMods(this.data);
 
         this.stats = AdvancedStats.fromPlayer(this.data);
-        this.itemStats = AdvancedStats.fromItems(this.data.items ?? []);
+
+        this.items = (this.data.items ?? []).map((i) => new Item(i));
+        this.itemStats = this.items
+            .map((i) => i.stats)
+            .reduce((a, b) => a.add(b), AdvancedStats.new());
+        this.itemStars = this.items
+            .map((i) => i.stars)
+            .reduce((a, b) => a.add(b), new Stars());
         this.adjustedStats = this.stats.add(this.itemStats);
-        this.itemStars = getItemStars(this.data.items ?? []);
     }
 
     hasMod(...mods: string[]): boolean {
@@ -73,7 +70,7 @@ export class Player {
         return false;
     }
 
-    stars(realStars = true, applyItems = false): PlayerStars {
+    stars(realStars = true, applyItems = false): Stars {
         if (this.data.hittingRating === undefined) realStars = true;
         if (realStars) {
             const stats = applyItems ? this.adjustedStats : this.stats;
@@ -82,34 +79,20 @@ export class Player {
         return this.providedStars(applyItems);
     }
 
-    providedStars(applyItems = false): PlayerStars {
+    providedStars(applyItems = false): Stars {
         if (this.data.hittingRating === undefined) {
             // Phantom Sixpack doesn't have this at all, force real formula
             return this.stars(true, applyItems);
         }
 
-        const stars = {
-            batting: this.data.hittingRating * 5,
-            pitching: this.data.pitchingRating * 5,
-            baserunning: this.data.baserunningRating * 5,
-            defense: this.data.defenseRating * 5,
-            combined:
-                (this.data.hittingRating +
-                    this.data.pitchingRating +
-                    this.data.baserunningRating +
-                    this.data.defenseRating) *
-                5,
-        };
+        const baseStars = new Stars(
+            this.data.hittingRating * 5,
+            this.data.pitchingRating * 5,
+            this.data.baserunningRating * 5,
+            this.data.defenseRating * 5
+        );
 
-        if (applyItems) {
-            stars.batting += this.itemStars.batting;
-            stars.pitching += this.itemStars.pitching;
-            stars.baserunning += this.itemStars.baserunning;
-            stars.defense += this.itemStars.defense;
-            stars.combined += this.itemStars.combined;
-        }
-
-        return stars;
+        return applyItems ? baseStars.add(this.itemStars) : baseStars;
     }
 
     status(): PlayerStatus {
@@ -201,23 +184,4 @@ export function getAllModIds(players: BlaseballPlayer[]): string[] {
         }
     }
     return Object.keys(map);
-}
-
-function getItemStars(items: PlayerItem[]): PlayerStars {
-    const stars = {
-        batting: 0,
-        pitching: 0,
-        baserunning: 0,
-        defense: 0,
-        combined: 0,
-    };
-    for (const item of items) {
-        stars.batting += item.hittingRating * 5;
-        stars.pitching += item.pitchingRating * 5;
-        stars.baserunning += item.baserunningRating * 5;
-        stars.defense += item.defenseRating * 5;
-    }
-    stars.combined =
-        stars.batting + stars.pitching + stars.baserunning + stars.defense;
-    return stars;
 }

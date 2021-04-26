@@ -1,14 +1,16 @@
 import clsx from "clsx";
-import { PlayerStars } from "../../models/Player";
 import { CellComponent, CellProps } from "./columns";
 import React from "react";
 import Tooltip from "rc-tooltip";
 import { useAppSelector } from "../../hooks";
 import { StatName } from "../../models/AdvancedStats";
+import { Stars } from "../../models/Stars";
+import { Item } from "../../models/Item";
 
 function NumericStat(props: {
     value: number | null;
-    itemValue: number | null;
+    items: Item[];
+    itemValue: (item: Item) => number;
     tiers: number[];
     inverse: boolean;
 }) {
@@ -18,8 +20,16 @@ function NumericStat(props: {
         (state) => state.tableOptions.applyItemAdjustments
     );
 
-    const itemValue =
-        applyItemAdjustments && props.itemValue ? props.itemValue ?? 0 : 0;
+    const itemValues = applyItemAdjustments
+        ? props.items
+              .map((item) => ({
+                  item,
+                  value: props.itemValue(item),
+              }))
+              .filter((i) => i.value)
+        : [];
+
+    const itemValue = itemValues.reduce((a, b) => a + b.value, 0);
     const value = props.value + itemValue;
     const tier = getTier(value, props.tiers, props.inverse);
 
@@ -36,15 +46,21 @@ function NumericStat(props: {
     );
 
     if (itemValue) {
-        const prefix = `Item: ${itemValue > 0 ? "+" : ""}`;
         return (
             <Tooltip
                 placement="top"
                 overlay={
-                    <span>
-                        {prefix}
-                        {itemValue.toFixed(3)}
-                    </span>
+                    <div>
+                        {itemValues.map((i) => {
+                            const sign = i.value > 0 ? "+" : "";
+                            return (
+                                <span>
+                                    {i.item.data.name}: {sign}
+                                    {i.value.toFixed(3)}
+                                </span>
+                            );
+                        })}
+                    </div>
                 }
             >
                 {tableCell}
@@ -62,12 +78,12 @@ export function advancedStat(
 ): CellComponent {
     function Cell(props: CellProps) {
         const value = props.player.stats.get(stat);
-        const itemValue = props.player.itemStats.get(stat);
 
         return (
             <NumericStat
                 value={value}
-                itemValue={itemValue}
+                items={props.player.items}
+                itemValue={(i) => i.stats.get(stat)}
                 tiers={tiers ?? attrTiers}
                 inverse={inverse ?? false}
             />
@@ -78,7 +94,7 @@ export function advancedStat(
 }
 
 export function starStat(
-    accessor: (stars: PlayerStars) => number,
+    accessor: (stars: Stars) => number,
     tiers: number[]
 ): CellComponent {
     function Cell(props: CellProps) {
@@ -87,12 +103,12 @@ export function starStat(
         );
 
         const value = accessor(props.player.stars(useRealStars));
-        const itemValue = accessor(props.player.itemStars);
 
         return (
             <NumericStat
                 value={value}
-                itemValue={itemValue}
+                items={props.player.items}
+                itemValue={(i) => accessor(i.stars)}
                 tiers={tiers}
                 inverse={false}
             />
