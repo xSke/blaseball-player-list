@@ -1,5 +1,6 @@
 import { Player, RosterEntry } from "../../models/Player";
 import { parseEmoji } from "../../utils";
+import Tooltip from "rc-tooltip";
 
 export function PlayerName(props: { player: Player }): JSX.Element {
     const id = props.player.id;
@@ -83,10 +84,24 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
         Shoes: "👟",
         Sunglasses: "🕶️",
     };
+
     const itemAmnt = playerItems ? playerItems.length : 0;
     return itemAmnt > 0 ? (
         <td>
-            {playerItems?.map((item) => rootNameMap[item.root.name])}
+            {
+                playerItems?.map((item) => {
+                    return (<Tooltip placement="top" overlay={
+                        <span>
+                            {item.name} <i>{(item.health === 0 ? " (broken)" : `(${item.health}/${item.durability})`)}</i>
+                        </span>
+                    }>
+                        <div className="item-icon">
+                            {rootNameMap[item.root.name]}
+                            {item.health === 0 ? <span className="broken-item">❌</span> : <span></span>}
+                        </div>
+                    </Tooltip>)
+                })
+            }
             {/* <button
                 onClick={() => dispatch(toggle(props.player.id))}
                 className="btn item-btn"
