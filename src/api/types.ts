@@ -54,6 +54,11 @@ export interface BlaseballPlayer {
     coffee: number;
     ritual: string;
     items?: PlayerItem[];
+    state?: PlayerState;
+}
+
+export interface PlayerState {
+    unscatteredName?: string;
 }
 
 export interface BlaseballTeam {

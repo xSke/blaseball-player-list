@@ -31,7 +31,7 @@ function applyPlayerFilter(
 ): Player[] {
     return players.filter((p) => {
         if (!matchTeam(p.teams, options.teams)) return false;
-        if (!matchName(p.data.name, options.search)) return false;
+        if (!matchName(p.names, options.search)) return false;
         if (!matchMods(p.mods, options.mods)) return false;
         if (!matchPositions(p.mainTeam?.position, options.positions))
             return false;
@@ -49,9 +49,13 @@ function matchTeam(teams: RosterEntry[], filterTeams: string[]): boolean {
     return false;
 }
 
-function matchName(name: string, search: string): boolean {
+function matchName(names: string[], search: string): boolean {
     if (!search) return true;
-    return name.toLocaleLowerCase().indexOf(search.toLocaleLowerCase()) > -1;
+    for (const name of names) {
+        if (name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+            return true;
+    }
+    return false;
 }
 
 function matchMods(mods: string[], filterMods: string[]): boolean {

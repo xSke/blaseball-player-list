@@ -35,6 +35,7 @@ export class Player {
     public readonly itemStars: Stars;
 
     public readonly items: Item[];
+    public readonly names: string[];
 
     constructor(
         player: ChroniclerPlayer,
@@ -60,6 +61,10 @@ export class Player {
             .map((i) => i.stars)
             .reduce((a, b) => a.add(b), new Stars());
         this.adjustedStats = this.stats.add(this.itemStats);
+
+        this.names = [this.data.name];
+        if (this.data.state?.unscatteredName)
+            this.names.push(this.data.state.unscatteredName);
     }
 
     hasMod(...mods: string[]): boolean {
