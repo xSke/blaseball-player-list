@@ -54,7 +54,7 @@ function NumericStat(props: {
                         {itemValues.map((i) => {
                             const sign = i.value > 0 ? "+" : "";
                             return (
-                                <span>
+                                <span key={i.item.data.id}>
                                     {i.item.data.name}: {sign}
                                     {i.value.toFixed(3)}
                                 </span>
