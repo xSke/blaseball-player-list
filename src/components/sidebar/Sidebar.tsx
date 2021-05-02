@@ -5,7 +5,7 @@ import Nav from "./Nav";
 import PlayerFilterSelect from "./PlayerFilterSelect";
 import { PlayerColumnsSelect } from "./PlayerColumnsSelect";
 import { TeamSelect } from "./TeamSelect";
-import { useTeamData } from "../../api/fetchhooks";
+import { useLeagueData } from "../../api/fetchhooks";
 
 function Sidebar(): JSX.Element {
     return (
@@ -34,11 +34,11 @@ function Sidebar(): JSX.Element {
 function SingleTeamFilter() {
     const history = useHistory();
     const { abbr } = useParams<{ abbr: string }>();
-    const teams = useTeamData();
 
-    if (!teams) return null;
+    const data = useLeagueData();
+    if (!data) return null;
 
-    const selectedTeam = Object.values(teams.teams).find(
+    const selectedTeam = Object.values(data.teams).find(
         (t) => t.shorthand === abbr
     );
 
@@ -53,7 +53,7 @@ function SingleTeamFilter() {
                     multi={false}
                     teams={selectedTeam ? [selectedTeam.id] : []}
                     setTeams={(newTeams) => {
-                        const newSelected = teams.teams[newTeams[0]];
+                        const newSelected = data.teams[newTeams[0]];
                         history.push(`/team/${newSelected.shorthand}`);
                     }}
                 />

@@ -1,6 +1,6 @@
 import Select from "react-select";
+import { useLeagueData } from "../../api/fetchhooks";
 import { BlaseballTeam } from "../../api/types";
-import { useTeamData } from "../../api/fetchhooks";
 import {
     coffeeTeamIds,
     ilbTeamIds,
@@ -15,12 +15,12 @@ export function TeamSelect(props: {
     setTeams: (teams: string[]) => void;
     multi: boolean;
 }): JSX.Element | null {
-    const teams = useTeamData();
-    if (!teams) return null;
+    const data = useLeagueData();
+    if (!data) return null;
 
-    const normalTeams = sortTeams(ilbTeamIds.map((id) => teams.teams[id]));
-    const coffeeTeams = sortTeams(coffeeTeamIds.map((id) => teams.teams[id]));
-    const specialTeams = specialTeamIds.map((id) => teams.teams[id]);
+    const normalTeams = sortTeams(ilbTeamIds.map((id) => data.teams[id]));
+    const coffeeTeams = sortTeams(coffeeTeamIds.map((id) => data.teams[id]));
+    const specialTeams = specialTeamIds.map((id) => data.teams[id]);
 
     const options = [
         { label: "ILB", options: normalTeams },
@@ -45,7 +45,7 @@ export function TeamSelect(props: {
             isMulti={props.multi}
             id={props.id}
             options={options}
-            value={props.teams.map((id) => teams.teams[id])}
+            value={props.teams.map((id) => data.teams[id])}
             getOptionValue={(team) => team.fullName}
             formatOptionLabel={formatOptionLabel}
             onChange={(value) => {

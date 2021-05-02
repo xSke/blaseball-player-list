@@ -1,4 +1,4 @@
-import { BlaseballPlayer, BlaseballTeam, ChroniclerPlayer } from "../api/types";
+import { BlaseballPlayer, BlaseballTeam, ChroniclerEntity } from "../api/types";
 import { getTeamType } from "../teams";
 import { AdvancedStats } from "./AdvancedStats";
 import { Item } from "./Item";
@@ -38,13 +38,13 @@ export class Player {
     public readonly names: string[];
 
     constructor(
-        player: ChroniclerPlayer,
+        player: ChroniclerEntity<BlaseballPlayer>,
         teams: Record<string, BlaseballTeam>,
         roster: Record<string, RosterEntry[]>
     ) {
-        this.id = player.id;
+        this.id = player.entityId;
         this.data = player.data;
-        this.teams = roster[player.id] ?? [];
+        this.teams = roster[player.entityId] ?? [];
 
         this.mainTeam = getMainTeam(this.teams);
         this.mainTeamData = this.mainTeam ? teams[this.mainTeam.teamId] : null;
@@ -181,10 +181,12 @@ export function extractPlayerMods(player: BlaseballPlayer): string[] {
     return [...permAttr, ...itemAttr, ...seasAttr, ...weekAttr, ...gameAttr];
 }
 
-export function getAllModIds(players: BlaseballPlayer[]): string[] {
+export function getAllModIds(
+    players: ChroniclerEntity<BlaseballPlayer>[]
+): string[] {
     const map: Record<string, boolean> = {};
     for (const p of players) {
-        for (const mod of extractPlayerMods(p)) {
+        for (const mod of extractPlayerMods(p.data)) {
             map[mod] = true;
         }
     }

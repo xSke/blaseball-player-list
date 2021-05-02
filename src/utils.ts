@@ -1,8 +1,8 @@
-import { ChroniclerTeam } from "./api/types";
+import { BlaseballTeam, ChroniclerEntity } from "./api/types";
 import { Player, RosterEntry, TeamPosition } from "./models/Player";
 
 export function generatePlayerTeamMap(
-    teams: ChroniclerTeam[]
+    teams: ChroniclerEntity<BlaseballTeam>[]
 ): Record<string, RosterEntry[]> {
     const map: Record<string, RosterEntry[]> = {};
 
@@ -20,10 +20,10 @@ export function generatePlayerTeamMap(
     }
 
     for (const team of teams) {
-        add(team.id, team.data.lineup, "lineup");
-        add(team.id, team.data.rotation, "rotation");
-        add(team.id, team.data.bullpen, "shadows");
-        add(team.id, team.data.bench, "shadows");
+        add(team.entityId, team.data.lineup, "lineup");
+        add(team.entityId, team.data.rotation, "rotation");
+        add(team.entityId, team.data.bullpen, "shadows");
+        add(team.entityId, team.data.bench, "shadows");
     }
 
     return map;

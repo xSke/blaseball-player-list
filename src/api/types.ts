@@ -80,6 +80,17 @@ export interface ChroniclerResponseV1<T> {
     data: T[];
 }
 
+export interface ChroniclerEntities<T> {
+    items: ChroniclerEntity<T>[];
+}
+
+export interface ChroniclerEntity<T> {
+    entityId: string;
+    validFrom: string;
+    validTo: string | null;
+    data: T;
+}
+
 export interface ChroniclerPlayer {
     id: string;
     data: BlaseballPlayer;

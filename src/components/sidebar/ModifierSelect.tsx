@@ -1,13 +1,14 @@
 import Select from "react-select";
-import { useAllModifiers } from "../../api/fetchhooks";
+import { useLeagueData } from "../../api/fetchhooks";
 
 function ModifierSelect(props: {
     id: string;
     mods: string[];
     setMods: (mods: string[]) => void;
 }): JSX.Element {
-    const allMods = useAllModifiers() ?? {};
-    const options = Object.values(allMods).map((mod) => ({
+    const data = useLeagueData();
+
+    const options = Object.values(data?.mods ?? []).map((mod) => ({
         value: mod.id,
         title: mod.title,
         description: mod.description,
