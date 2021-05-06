@@ -2,6 +2,21 @@ import { Player, RosterEntry } from "../../models/Player";
 import { parseEmoji } from "../../utils";
 import Tooltip from "rc-tooltip";
 
+export function PlayerID(props: { player: Player }): JSX.Element {
+    const id = props.player.id;
+    return (
+        <td
+            className="player-id"
+            onClick={(e) => {
+                const sel = window.getSelection();
+                sel?.selectAllChildren(e.target as Node);
+            }}
+        >
+            <code>{id}</code>
+        </td>
+    );
+}
+
 export function PlayerName(props: { player: Player }): JSX.Element {
     const id = props.player.id;
     const name = props.player.data.name;
@@ -88,20 +103,32 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
     const itemAmnt = playerItems ? playerItems.length : 0;
     return itemAmnt > 0 ? (
         <td>
-            {
-                playerItems?.map((item) => {
-                    return (<Tooltip placement="top" overlay={
-                        <span>
-                            {item.name} <i>{(item.health === 0 ? " (broken)" : `(${item.health}/${item.durability})`)}</i>
-                        </span>
-                    }>
+            {playerItems?.map((item) => {
+                return (
+                    <Tooltip
+                        placement="top"
+                        overlay={
+                            <span>
+                                {item.name}{" "}
+                                <i>
+                                    {item.health === 0
+                                        ? " (broken)"
+                                        : `(${item.health}/${item.durability})`}
+                                </i>
+                            </span>
+                        }
+                    >
                         <div className="item-icon">
                             {rootNameMap[item.root.name]}
-                            {item.health === 0 ? <span className="broken-item">❌</span> : <span></span>}
+                            {item.health === 0 ? (
+                                <span className="broken-item">❌</span>
+                            ) : (
+                                <span></span>
+                            )}
                         </div>
-                    </Tooltip>)
-                })
-            }
+                    </Tooltip>
+                );
+            })}
             {/* <button
                 onClick={() => dispatch(toggle(props.player.id))}
                 className="btn item-btn"

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type ListColumn =
+    | "playerid"
     | "team"
     | "position"
     | "items"
@@ -20,6 +21,7 @@ export interface TableOptionsSlice {
 
 const initialState = {
     columns: {
+        playerid: false,
         team: true,
         position: true,
         items: false,

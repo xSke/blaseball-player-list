@@ -1,6 +1,12 @@
 import { TableOptionsSlice } from "../../store/tableOptionsSlice";
 import { positionSortKey as getPositionSortKey } from "../../utils";
-import { PlayerName, PlayerPosition, PlayerTeam, PlayerItem } from "./cells";
+import {
+    PlayerName,
+    PlayerPosition,
+    PlayerTeam,
+    PlayerItem,
+    PlayerID,
+} from "./cells";
 import {
     advancedStat,
     attrTiers,
@@ -19,6 +25,13 @@ export function getColumns(opts: TableOptionsSlice): ColumnGroup[] {
         {
             name: "Info",
             columns: [
+                {
+                    id: "playerid",
+                    name: "Player ID",
+                    render: PlayerID,
+                    sortKey: (p) => p.id,
+                    hidden: !cols.playerid,
+                },
                 {
                     id: "name",
                     name: "Name",

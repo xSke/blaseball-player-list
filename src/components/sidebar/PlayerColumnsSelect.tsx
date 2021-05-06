@@ -11,6 +11,7 @@ export function PlayerColumnsSelect(): JSX.Element {
     return (
         <div>
             <div className="form-label">Show columns</div>
+            <ColumnCheckbox column="playerid">ID</ColumnCheckbox>
             <ColumnCheckbox column="team">Team</ColumnCheckbox>
             <ColumnCheckbox column="position">Position</ColumnCheckbox>
             <ColumnCheckbox column="items">Items</ColumnCheckbox>
