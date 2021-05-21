@@ -88,15 +88,25 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
         [key: string]: string;
     };
     const rootNameMap: itemMap = {
+        Base: "⬜",
         Bat: "🏏",
         Board: "🛹",
+        Broom: "🧹",
+        Cannon: "🔫",
         Cap: "🧢",
+        Cape: "👗",
         Field: "🔵",
         Glove: "🧤",
+        Helmet: "🪖",
         Jersey: "👕",
         Necklace: "📿",
+        Phone: "☎️",
+        Pillow: "🛏️",
+        Potion: "🧪",
+        Quill: "🪶",
         Ring: "💍",
         Shoes: "👟",
+        Socks: "🧦",
         Sunglasses: "🕶️",
     };
 
@@ -119,7 +129,7 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
                         }
                     >
                         <div className="item-icon">
-                            {rootNameMap[item.root.name]}
+                            {rootNameMap[item.root.name] ?? "❔"}
                             {item.health === 0 ? (
                                 <span className="broken-item">❌</span>
                             ) : (
