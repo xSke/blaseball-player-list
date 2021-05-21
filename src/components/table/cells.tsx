@@ -97,7 +97,7 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
         Cape: "👗",
         Field: "🔵",
         Glove: "🧤",
-        Helmet: "🪖",
+        Helmet: "⛑",
         Jersey: "👕",
         Necklace: "📿",
         Phone: "☎️",
