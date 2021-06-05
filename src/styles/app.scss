@@ -126,12 +126,24 @@ html, body, .app {
 .item-icon {
     position: relative;
     display: inline-block;
+    width: 1.5em;
 }
 
 .broken-item {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.legendary-item {
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px 1px #ffc81e;
+    margin: 0 0.05em 0 0.05em;
+}
+
+.legendary-item-name {
+    color: #ffc81e;
+    text-shadow: 0 0 0.7em #ffc81e;
 }
 
 .rc-tooltip {

@@ -118,17 +118,19 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
                     <Tooltip
                         placement="top"
                         overlay={
-                            <span>
+                            <span className={item.durability === -1 ? 'legendary-item-name' : ''}>
                                 {item.name}{" "}
                                 <i>
-                                    {item.health === 0
-                                        ? " (broken)"
-                                        : `(${item.health}/${item.durability})`}
+                                    {item.durability === -1
+                                        ? "(∞)"
+                                        : (item.health === 0
+                                            ? "(broken)"
+                                            : `(${item.health}/${item.durability})`)}
                                 </i>
                             </span>
                         }
                     >
-                        <div className="item-icon">
+                        <div className={`item-icon ${item.durability === -1 ? 'legendary-item' : ''}`}>
                             {rootNameMap[item.root.name] ?? "❔"}
                             {item.health === 0 ? (
                                 <span className="broken-item">❌</span>
