@@ -1,6 +1,6 @@
 import { BlaseballTeam } from "./api/types";
 
-export type TeamType = "league" | "coffee" | "special" | "deprecated";
+export type TeamType = "league" | "coffee" | "special" | "ulb" | "deprecated";
 
 export const ilbTeamIds = [
     "105bc3ff-1320-4e37-8ef0-8d595cb95dd0",
@@ -53,6 +53,10 @@ export const specialTeamIds = [
     "40b9ec2a-cb43-4dbb-b836-5accb62e7c20", // PODS
 ];
 
+export const ulbTeamIds = [
+    "88151292-6c12-4fb8-b2d6-3e64821293b3", // Alaskan Immortals
+];
+
 export function sortTeams(teams: BlaseballTeam[]): BlaseballTeam[] {
     return [...teams].sort((a, b) => {
         return a.nickname.localeCompare(b.nickname);
@@ -66,5 +70,6 @@ export function getTeamType(teamId: string): TeamType | null {
     if (ilbTeamIds.includes(teamId)) return "league";
     if (coffeeTeamIds.includes(teamId)) return "coffee";
     if (specialTeamIds.includes(teamId)) return "special";
+    if (ulbTeamIds.includes(teamId)) return "ulb";
     return null;
 }
