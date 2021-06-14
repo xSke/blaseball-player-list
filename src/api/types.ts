@@ -71,7 +71,7 @@ export interface BlaseballTeam {
     lineup: string[];
     rotation: string[];
     shadows?: string[];
-    
+
     // for compatibility with the Pods
     bench?: string[];
     bullpen?: string[];
