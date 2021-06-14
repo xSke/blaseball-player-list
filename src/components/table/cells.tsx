@@ -88,15 +88,25 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
         [key: string]: string;
     };
     const rootNameMap: itemMap = {
+        Base: "⬜",
         Bat: "🏏",
         Board: "🛹",
+        Broom: "🧹",
+        Cannon: "🔫",
         Cap: "🧢",
+        Cape: "👗",
         Field: "🔵",
         Glove: "🧤",
+        Helmet: "⛑",
         Jersey: "👕",
         Necklace: "📿",
+        Phone: "☎️",
+        Pillow: "🛏️",
+        Potion: "🧪",
+        Quill: "🪶",
         Ring: "💍",
         Shoes: "👟",
+        Socks: "🧦",
         Sunglasses: "🕶️",
     };
 
@@ -108,18 +118,20 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
                     <Tooltip
                         placement="top"
                         overlay={
-                            <span>
+                            <span className={item.durability === -1 ? 'legendary-item-name' : ''}>
                                 {item.name}{" "}
                                 <i>
-                                    {item.health === 0
-                                        ? " (broken)"
-                                        : `(${item.health}/${item.durability})`}
+                                    {item.durability === -1
+                                        ? "(∞)"
+                                        : (item.health === 0
+                                            ? "(broken)"
+                                            : `(${item.health}/${item.durability})`)}
                                 </i>
                             </span>
                         }
                     >
-                        <div className="item-icon">
-                            {rootNameMap[item.root.name]}
+                        <div className={`item-icon ${item.durability === -1 ? 'legendary-item' : ''}`}>
+                            {rootNameMap[item.root.name] ?? "❔"}
                             {item.health === 0 ? (
                                 <span className="broken-item">❌</span>
                             ) : (

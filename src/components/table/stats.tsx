@@ -54,10 +54,10 @@ function NumericStat(props: {
                         {itemValues.map((i) => {
                             const sign = i.value > 0 ? "+" : "";
                             return (
-                                <span key={i.item.data.id}>
-                                    {i.item.data.name}: {sign}
+                                <div key={i.item.data.id}>
+                                    <span className={i.item.data.durability === -1 ? 'legendary-item-name' : ''}>{i.item.data.name}</span>: {sign}
                                     {i.value.toFixed(3)}
-                                </span>
+                                </div>
                             );
                         })}
                     </div>
