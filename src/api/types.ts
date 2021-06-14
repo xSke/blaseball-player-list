@@ -70,8 +70,11 @@ export interface BlaseballTeam {
 
     lineup: string[];
     rotation: string[];
-    bullpen: string[];
-    bench: string[];
+    shadows?: string[];
+    
+    // for compatibility with the Pods
+    bench?: string[];
+    bullpen?: string[];
 
     stadium: string | null;
 }
