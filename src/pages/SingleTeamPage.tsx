@@ -28,7 +28,7 @@ function SingleTeamPage(): JSX.Element {
             <div className="mb-4">
                 <h4>Shadows</h4>
                 <PlayerTable
-                    players={team.shadows.map(
+                    players={(team.shadows ?? [...team.bench, ...team.bullpen]).map(
                         (id) => data.players[id]
                     )}
                 />

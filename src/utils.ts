@@ -22,7 +22,9 @@ export function generatePlayerTeamMap(
     for (const team of teams) {
         add(team.entityId, team.data.lineup, "lineup");
         add(team.entityId, team.data.rotation, "rotation");
-        add(team.entityId, team.data.shadows, "shadows");
+        add(team.entityId, team.data.bench ?? [], "shadows");
+        add(team.entityId, team.data.bullpen ?? [], "shadows");
+        add(team.entityId, team.data.shadows ?? [], "shadows");
     }
 
     return map;
