@@ -84,6 +84,7 @@ export interface ChroniclerResponseV1<T> {
 }
 
 export interface ChroniclerEntities<T> {
+    nextPage: string | null;
     items: ChroniclerEntity<T>[];
 }
 
