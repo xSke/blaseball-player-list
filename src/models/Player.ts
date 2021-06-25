@@ -1,5 +1,5 @@
 import { BlaseballPlayer, BlaseballTeam, ChroniclerEntity } from "../api/types";
-import { getTeamType } from "../teams";
+import { getTeamType, libraryTeamIds } from "../teams";
 import { AdvancedStats } from "./AdvancedStats";
 import { Item } from "./Item";
 import { Stars } from "./Stars";
@@ -18,6 +18,7 @@ export type PlayerStatus =
     | "deprecated"
     | "deceased"
     | "retired"
+    | "library"
     | "exhibition";
 
 export class Player {
@@ -107,10 +108,15 @@ export class Player {
         if (this.data.deceased) return "deceased";
 
         // We're making a lot of plot assumptions here :)
-        if (this.hasMod("RETIRED", "STATIC", "LEGENDARY")) return "retired";
+        if (
+            this.hasMod("RETIRED", "STATIC", "DUST") ||
+            (this.hasMod("LEGENDARY") && !this.hasMod("REPLICA"))
+        )
+            return "retired";
 
         const team = this.mainTeam?.teamId ?? "";
         if (exhibitionTeams.includes(team)) return "exhibition";
+        if (libraryTeamIds.includes(team)) return "library";
 
         // Percolated players count as Coffee Cup
         if (this.hasMod("COFFEE_EXIT")) return "exhibition";
@@ -130,7 +136,8 @@ export class Player {
 function getMainTeam(teams: RosterEntry[]): RosterEntry | null {
     const leagueTeam = teams.find((t) => getTeamType(t.teamId) === "league");
     const specialTeam = teams.find((t) => getTeamType(t.teamId) === "special");
-    return leagueTeam ?? specialTeam ?? null;
+    const libraryTeam = teams.find((t) => getTeamType(t.teamId) === "library");
+    return leagueTeam ?? specialTeam ?? libraryTeam ?? null;
 }
 
 const bloodTypes = [

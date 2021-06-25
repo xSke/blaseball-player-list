@@ -6,7 +6,7 @@ import {
     ilbTeamIds,
     sortTeams,
     specialTeamIds,
-    ulbTeamIds,
+    libraryTeamIds,
 } from "../../teams";
 import { parseEmoji } from "../../utils";
 
@@ -22,11 +22,13 @@ export function TeamSelect(props: {
     const normalTeams = sortTeams(ilbTeamIds.map((id) => data.teams[id]));
     const coffeeTeams = sortTeams(coffeeTeamIds.map((id) => data.teams[id]));
     const specialTeams = specialTeamIds.map((id) => data.teams[id]);
-    const ulbTeams = ulbTeamIds.map((id) => data.teams[id]);
+    const libraryTeams = sortTeams(
+        libraryTeamIds.map((id) => data.teams[id]).filter((t) => !!t)
+    );
 
     const options = [
         { label: "ILB", options: normalTeams },
-        { label: "ULB", options: ulbTeams },
+        { label: "Library", options: libraryTeams },
         { label: "Coffee Cup", options: coffeeTeams },
         { label: "Special", options: specialTeams },
     ];

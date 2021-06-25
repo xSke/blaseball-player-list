@@ -122,6 +122,7 @@ function StatusFilter() {
                     { value: "deceased", label: "Deceased" },
                     { value: "retired", label: "Retired" },
                     { value: "exhibition", label: "Exhibition" },
+                    { value: "library", label: "Pre-History" },
                 ]}
                 onChange={(newItems) => {
                     const statuses = newItems.map((item) => item.value);

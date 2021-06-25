@@ -1,6 +1,11 @@
 import { BlaseballTeam } from "./api/types";
 
-export type TeamType = "league" | "coffee" | "special" | "ulb" | "deprecated";
+export type TeamType =
+    | "league"
+    | "coffee"
+    | "special"
+    | "library"
+    | "deprecated";
 
 export const ilbTeamIds = [
     "105bc3ff-1320-4e37-8ef0-8d595cb95dd0",
@@ -53,8 +58,26 @@ export const specialTeamIds = [
     "40b9ec2a-cb43-4dbb-b836-5accb62e7c20", // PODS
 ];
 
-export const ulbTeamIds = [
+export const libraryTeamIds = [
     "88151292-6c12-4fb8-b2d6-3e64821293b3", // Alaskan Immortals
+    "54d0d0f2-16e0-42a0-9fff-79cfa7c4a157", // Antarctic Fireballs
+    "9494152b-99f6-4adb-9573-f9e084bc813f", // Baltimore Crabs (alt)
+    "d6a352fc-b675-40a0-864d-f4fd50aaeea0", // Canada Artists
+    "55c9fee3-79c8-4467-8dfb-ff1e340aae8c", // [U09]
+    "71c621eb-85dc-4bd7-a690-0c68c0e6fb90", // Downward Dogs
+    "b6b5df8f-5602-4883-b47d-07e77ed9d5af", // [U13]
+    "1e04e5cc-80a6-41c0-af0d-7292817eed79", // [U15]
+    "d0762a7e-004b-48a9-a832-a993982b305b", // [U16]
+    "3a094991-4cbc-4786-b74c-688876d243f4", // [U17]
+    "c19bb50b-9a22-4dd2-8200-bce639b1b239", // [U19]
+    "cbd44c06-231a-4d1a-bb7d-4170b06e566a", // [U23]
+    "1a51664e-efec-45fa-b0ba-06d04c344628", // [U24]
+    "258f6389-aac1-43d2-b30a-4b4dde90d5eb", // [U25]
+    "a4b23784-0132-4813-b300-f7449cb06493", // Phoenix Trunks
+    "4cd14d96-f817-41a3-af6c-2d3ed0dd20b7", // [U28]
+    "3543229a-668c-4ac9-b64a-588422481f12", // [U29]
+    "cfd20759-5f9c-4596-9493-2669b6daf396", // [??A]
+    "4c192065-65d8-4010-8145-395f82d24ddf", // [??B]
 ];
 
 export function sortTeams(teams: BlaseballTeam[]): BlaseballTeam[] {
@@ -70,6 +93,6 @@ export function getTeamType(teamId: string): TeamType | null {
     if (ilbTeamIds.includes(teamId)) return "league";
     if (coffeeTeamIds.includes(teamId)) return "coffee";
     if (specialTeamIds.includes(teamId)) return "special";
-    if (ulbTeamIds.includes(teamId)) return "ulb";
+    if (libraryTeamIds.includes(teamId)) return "library";
     return null;
 }

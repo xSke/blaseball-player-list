@@ -34,9 +34,11 @@ export function PlayerTeam(props: { player: Player }): JSX.Element {
     function getTeamData(
         player: Player
     ): { emoji: string; name: string } | null {
-        if (player.data.deceased) return { emoji: "💀", name: "The Hall" };
         const team = player.mainTeamData;
-        if (!team) return null;
+        if (!team) {
+            if (player.data.deceased) return { emoji: "💀", name: "The Hall" };
+            return null;
+        }
         return { emoji: parseEmoji(team.emoji), name: team.nickname };
     }
 
@@ -60,8 +62,9 @@ export function PlayerPosition(props: { player: Player }): JSX.Element {
     }) {
         if (
             !team ||
-            player.data.deceased ||
-            player.hasMod("COFFEE_EXIT", "REDACTED", "STATIC", "LEGENDARY")
+            // player.data.deceased ||
+            player.hasMod("COFFEE_EXIT", "REDACTED", "STATIC") ||
+            (player.hasMod("LEGENDARY") && !player.hasMod("REPLICA"))
         )
             return null;
 
@@ -118,19 +121,29 @@ export function PlayerItem(props: { player: Player }): JSX.Element {
                     <Tooltip
                         placement="top"
                         overlay={
-                            <span className={item.durability === -1 ? 'legendary-item-name' : ''}>
+                            <span
+                                className={
+                                    item.durability === -1
+                                        ? "legendary-item-name"
+                                        : ""
+                                }
+                            >
                                 {item.name}{" "}
                                 <i>
                                     {item.durability === -1
                                         ? "(∞)"
-                                        : (item.health === 0
-                                            ? "(broken)"
-                                            : `(${item.health}/${item.durability})`)}
+                                        : item.health === 0
+                                        ? "(broken)"
+                                        : `(${item.health}/${item.durability})`}
                                 </i>
                             </span>
                         }
                     >
-                        <div className={`item-icon ${item.durability === -1 ? 'legendary-item' : ''}`}>
+                        <div
+                            className={`item-icon ${
+                                item.durability === -1 ? "legendary-item" : ""
+                            }`}
+                        >
                             {rootNameMap[item.root.name] ?? "❔"}
                             {item.health === 0 ? (
                                 <span className="broken-item">❌</span>
