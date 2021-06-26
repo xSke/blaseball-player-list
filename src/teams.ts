@@ -62,6 +62,7 @@ export const libraryTeamIds = [
     "88151292-6c12-4fb8-b2d6-3e64821293b3", // Alaskan Immortals
     "54d0d0f2-16e0-42a0-9fff-79cfa7c4a157", // Antarctic Fireballs
     "9494152b-99f6-4adb-9573-f9e084bc813f", // Baltimore Crabs (alt)
+    "939db13f-79c9-41c5-9a15-b340b1bea875", // Boulders Bay Birds
     "d6a352fc-b675-40a0-864d-f4fd50aaeea0", // Canada Artists
     "55c9fee3-79c8-4467-8dfb-ff1e340aae8c", // [U09]
     "71c621eb-85dc-4bd7-a690-0c68c0e6fb90", // Downward Dogs
@@ -69,7 +70,7 @@ export const libraryTeamIds = [
     "1e04e5cc-80a6-41c0-af0d-7292817eed79", // [U15]
     "d0762a7e-004b-48a9-a832-a993982b305b", // [U16]
     "3a094991-4cbc-4786-b74c-688876d243f4", // [U17]
-    "c19bb50b-9a22-4dd2-8200-bce639b1b239", // [U19]
+    "c19bb50b-9a22-4dd2-8200-bce639b1b239", // Minneapolis Truckers
     "cbd44c06-231a-4d1a-bb7d-4170b06e566a", // [U23]
     "1a51664e-efec-45fa-b0ba-06d04c344628", // [U24]
     "258f6389-aac1-43d2-b30a-4b4dde90d5eb", // [U25]
