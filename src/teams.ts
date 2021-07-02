@@ -67,7 +67,8 @@ export const libraryTeamIds = [
     "2e22beba-8e36-42ba-a8bf-975683c52b5f", // Carolina Queens
     "55c9fee3-79c8-4467-8dfb-ff1e340aae8c", // [U09]
     "71c621eb-85dc-4bd7-a690-0c68c0e6fb90", // Downward Dogs
-    "b6b5df8f-5602-4883-b47d-07e77ed9d5af", // [U13]
+    "b6b5df8f-5602-4883-b47d-07e77ed9d5af", // Laredo Excavators
+    "00245773-6f25-43b1-a863-42b4068888f0", // La Paz Llamas
     "1e04e5cc-80a6-41c0-af0d-7292817eed79", // [U15]
     "d0762a7e-004b-48a9-a832-a993982b305b", // [U16]
     "3a094991-4cbc-4786-b74c-688876d243f4", // [U17]
