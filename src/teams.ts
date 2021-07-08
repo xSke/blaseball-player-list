@@ -72,13 +72,14 @@ export const libraryTeamIds = [
     "00245773-6f25-43b1-a863-42b4068888f0", // La Paz Llamas
     "1e04e5cc-80a6-41c0-af0d-7292817eed79", // Louisville Lobsters
     "d0762a7e-004b-48a9-a832-a993982b305b", // Mallorca Whales
-    "3a094991-4cbc-4786-b74c-688876d243f4", // [U17]
+    "3a094991-4cbc-4786-b74c-688876d243f4", // Maryland Squirrels
     "c19bb50b-9a22-4dd2-8200-bce639b1b239", // Minneapolis Truckers
-    "53d473fb-ffee-4fd3-aa1c-671228adc592", // [U21]
-    "cbd44c06-231a-4d1a-bb7d-4170b06e566a", // [U23]
-    "1a51664e-efec-45fa-b0ba-06d04c344628", // [U24]
+    "53d473fb-ffee-4fd3-aa1c-671228adc592", // New Hampshire Eggplants
+    "cbd44c06-231a-4d1a-bb7d-4170b06e566a", // Oklahoma Heartthrobs
+    "1a51664e-efec-45fa-b0ba-06d04c344628", // Oregon Psychics
     "258f6389-aac1-43d2-b30a-4b4dde90d5eb", // [U25]
     "a4b23784-0132-4813-b300-f7449cb06493", // Phoenix Trunks
+    "774762ee-c234-4c57-90a1-e1e69db3f6a7", // Sao Paulo Parrots
     "4cd14d96-f817-41a3-af6c-2d3ed0dd20b7", // [U28]
     "3543229a-668c-4ac9-b64a-588422481f12", // Wyoming Dolphins
     "cfd20759-5f9c-4596-9493-2669b6daf396", // [??A]
