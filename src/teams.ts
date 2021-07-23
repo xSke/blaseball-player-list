@@ -65,6 +65,7 @@ export const libraryTeamIds = [
     "939db13f-79c9-41c5-9a15-b340b1bea875", // Boulders Bay Birds
     "67c0a873-ef6d-4a85-8293-af638edf3c9f", // Busan Bison
     "d6a352fc-b675-40a0-864d-f4fd50aaeea0", // Canada Artists
+    "ed60c164-fd31-42ff-8ae1-70220626f5a7", // Canberra Drop Bears
     "2e22beba-8e36-42ba-a8bf-975683c52b5f", // Carolina Queens
     "55c9fee3-79c8-4467-8dfb-ff1e340aae8c", // Dallas Cows
     "71c621eb-85dc-4bd7-a690-0c68c0e6fb90", // Downward Dogs
