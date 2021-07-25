@@ -51,6 +51,8 @@ export const coffeeTeamIds = [
 ];
 
 export const specialTeamIds = [
+    "698cfc6d-e95e-4391-b754-b87337e4d2a9", // Vault Legends
+    "280c587b-e8f6-4a7e-a8ce-fd2fa2fa3e70", // Rising Stars
     "d2634113-b650-47b9-ad95-673f8e28e687", // Data Witches
     "3b0a289b-aebd-493c-bc11-96793e7216d5", // Artists
     "7fcb63bc-11f2-40b9-b465-f1d458692a63", // Game Band
