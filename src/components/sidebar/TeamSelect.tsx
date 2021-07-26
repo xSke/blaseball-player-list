@@ -7,6 +7,7 @@ import {
     sortTeams,
     specialTeamIds,
     libraryTeamIds,
+    getTeamType,
 } from "../../teams";
 import { parseEmoji } from "../../utils";
 
@@ -25,6 +26,11 @@ export function TeamSelect(props: {
     const libraryTeams = sortTeams(
         libraryTeamIds.map((id) => data.teams[id]).filter((t) => !!t)
     );
+    const unknownTeams = sortTeams(
+        Object.keys(data.teams)
+            .filter((t) => getTeamType(t) === null)
+            .map((id) => data.teams[id])
+    );
 
     const options = [
         { label: "ILB", options: normalTeams },
@@ -32,6 +38,10 @@ export function TeamSelect(props: {
         { label: "Coffee Cup", options: coffeeTeams },
         { label: "Special", options: specialTeams },
     ];
+
+    if (unknownTeams.length) {
+        options.push({ label: "uhhhhh", options: unknownTeams });
+    }
 
     const formatOptionLabel = (
         option: BlaseballTeam,
