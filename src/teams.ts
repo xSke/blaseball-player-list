@@ -74,6 +74,8 @@ export const libraryTeamIds = [
     "74966fbd-5d77-48b1-8075-9bf197583775", // Florence Rhinoceroses
     "b6b5df8f-5602-4883-b47d-07e77ed9d5af", // Laredo Excavators
     "00245773-6f25-43b1-a863-42b4068888f0", // La Paz Llamas
+    "26f947db-4e2a-41a5-896c-02cf8eb47af0", // Lisbon Lynx
+    "7bc12507-1a84-4921-9338-c1888d56dcd7", // London Frogs
     "1e04e5cc-80a6-41c0-af0d-7292817eed79", // Louisville Lobsters
     "d0762a7e-004b-48a9-a832-a993982b305b", // Mallorca Whales
     "3a094991-4cbc-4786-b74c-688876d243f4", // Maryland Squirrels
