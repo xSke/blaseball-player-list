@@ -94,7 +94,9 @@ export const libraryTeamIds = [
 
 export function sortTeams(teams: BlaseballTeam[]): BlaseballTeam[] {
     return [...teams].sort((a, b) => {
-        return a.nickname.localeCompare(b.nickname);
+        const aName = getTeamName(a);
+        const bName = getTeamName(b);
+        return aName.nickname.localeCompare(bName.nickname);
     });
 }
 
