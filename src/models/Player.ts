@@ -68,6 +68,13 @@ export class Player {
             this.names.push(this.data.state.unscatteredName);
     }
 
+    name(showUnscatteredName: boolean): string {
+        if (showUnscatteredName) {
+            return this.data.state?.unscatteredName ?? this.data.name;
+        }
+        return this.data.name;
+    }
+
     hasMod(...mods: string[]): boolean {
         // TODO: O(n^2)
         for (const mod of mods) {

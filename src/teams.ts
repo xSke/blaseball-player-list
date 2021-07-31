@@ -98,6 +98,26 @@ export function sortTeams(teams: BlaseballTeam[]): BlaseballTeam[] {
     });
 }
 
+export function getTeamName(team: BlaseballTeam): {
+    location: string;
+    nickname: string;
+    fullName: string;
+} {
+    if (team?.state?.scattered) {
+        return {
+            location: team.state.scattered.location,
+            nickname: team.state.scattered.nickname,
+            fullName: team.state.scattered.fullName,
+        };
+    }
+
+    return {
+        location: team.location,
+        nickname: team.nickname,
+        fullName: team.fullName,
+    };
+}
+
 export function getTeamType(teamId: string): TeamType | null {
     // PODS is deprecated but still in the special list so
     if (teamId == "40b9ec2a-cb43-4dbb-b836-5accb62e7c20") return "deprecated";

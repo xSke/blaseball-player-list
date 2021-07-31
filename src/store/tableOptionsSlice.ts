@@ -17,6 +17,7 @@ export interface TableOptionsSlice {
     useRealStars: boolean;
     showAdvancedStats: boolean;
     applyItemAdjustments: boolean;
+    showUnscatteredNames: boolean;
 }
 
 const initialState = {
@@ -35,6 +36,7 @@ const initialState = {
     applyItemAdjustments: true,
     useRealStars: true,
     showAdvancedStats: true,
+    showUnscatteredNames: true
 } as TableOptionsSlice;
 
 export const tableOptionsSlice = createSlice({
@@ -56,6 +58,9 @@ export const tableOptionsSlice = createSlice({
         setApplyItemAdjustments: (state, action: PayloadAction<boolean>) => {
             state.applyItemAdjustments = action.payload;
         },
+        setShowUnscatteredNames: (state, action: PayloadAction<boolean>) => {
+            state.showUnscatteredNames = action.payload;
+        },
     },
 });
 
@@ -64,4 +69,5 @@ export const {
     setUseRealStars,
     setShowAdvancedStats,
     setApplyItemAdjustments,
+    setShowUnscatteredNames,
 } = tableOptionsSlice.actions;

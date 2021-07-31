@@ -8,6 +8,7 @@ import {
     specialTeamIds,
     libraryTeamIds,
     getTeamType,
+    getTeamName,
 } from "../../teams";
 import { parseEmoji } from "../../utils";
 
@@ -47,10 +48,11 @@ export function TeamSelect(props: {
         option: BlaseballTeam,
         meta: { context: string }
     ) => {
+        const teamName = getTeamName(option);
         return (
             <span>
                 <span className="emoji">{parseEmoji(option.emoji)}</span>
-                {meta.context === "menu" ? option.nickname : option.nickname}
+                {meta.context === "menu" ? teamName.nickname : teamName.nickname}
             </span>
         );
     };
@@ -61,7 +63,7 @@ export function TeamSelect(props: {
             id={props.id}
             options={options}
             value={props.teams.map((id) => data.teams[id])}
-            getOptionValue={(team) => team.fullName}
+            getOptionValue={(team) => getTeamName(team).fullName}
             formatOptionLabel={formatOptionLabel}
             onChange={(value) => {
                 // depends whether multi flag is set

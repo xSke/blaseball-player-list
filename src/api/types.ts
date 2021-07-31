@@ -63,6 +63,7 @@ export interface PlayerState {
 
 export interface BlaseballTeam {
     id: string;
+    location: string;
     fullName: string;
     nickname: string;
     emoji: string;
@@ -77,6 +78,12 @@ export interface BlaseballTeam {
     bullpen?: string[];
 
     stadium: string | null;
+
+    state?: TeamState;
+}
+
+export interface TeamState {
+    scattered?: { fullName: string; nickname: string; location: string };
 }
 
 export interface ChroniclerResponseV1<T> {

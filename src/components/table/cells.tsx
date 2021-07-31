@@ -1,6 +1,8 @@
 import { Player, RosterEntry } from "../../models/Player";
 import { parseEmoji } from "../../utils";
 import Tooltip from "rc-tooltip";
+import { useAppSelector } from "../../hooks";
+import { getTeamName } from "../../teams";
 
 export function PlayerID(props: { player: Player }): JSX.Element {
     const id = props.player.id;
@@ -18,8 +20,12 @@ export function PlayerID(props: { player: Player }): JSX.Element {
 }
 
 export function PlayerName(props: { player: Player }): JSX.Element {
+    const showUnscatteredNames = useAppSelector(
+        (state) => state.tableOptions.showUnscatteredNames
+    );
+
     const id = props.player.id;
-    const name = props.player.data.name;
+    const name = props.player.name(showUnscatteredNames);
 
     return (
         <td className="player-name">
@@ -39,7 +45,9 @@ export function PlayerTeam(props: { player: Player }): JSX.Element {
             if (player.data.deceased) return { emoji: "💀", name: "The Hall" };
             return null;
         }
-        return { emoji: parseEmoji(team.emoji), name: team.nickname };
+
+        const teamName = getTeamName(team);
+        return { emoji: parseEmoji(team.emoji), name: teamName.nickname };
     }
 
     const data = getTeamData(props.player);

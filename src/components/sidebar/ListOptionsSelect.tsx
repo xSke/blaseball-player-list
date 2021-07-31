@@ -2,6 +2,7 @@ import React from "react";
 import {
     setApplyItemAdjustments,
     setShowAdvancedStats,
+    setShowUnscatteredNames,
     setUseRealStars,
 } from "../../store/tableOptionsSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -35,6 +36,15 @@ function ListOptionsSelect(): JSX.Element {
                 setValue={(val) => dispatch(setApplyItemAdjustments(val))}
             >
                 Apply item adjustments
+            </CheckboxOption>
+
+
+            <CheckboxOption
+                id="unscatter-names"
+                value={opts.showUnscatteredNames}
+                setValue={(val) => dispatch(setShowUnscatteredNames(val))}
+            >
+                Unscatter player names
             </CheckboxOption>
         </div>
     );
