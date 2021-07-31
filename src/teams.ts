@@ -64,6 +64,7 @@ export const libraryTeamIds = [
     "88151292-6c12-4fb8-b2d6-3e64821293b3", // Alaskan Immortals
     "54d0d0f2-16e0-42a0-9fff-79cfa7c4a157", // Antarctic Fireballs
     "9494152b-99f6-4adb-9573-f9e084bc813f", // Baltimore Crabs (alt)
+    "cfd20759-5f9c-4596-9493-2669b6daf396", // Beijing Bicycles
     "939db13f-79c9-41c5-9a15-b340b1bea875", // Boulders Bay Birds
     "67c0a873-ef6d-4a85-8293-af638edf3c9f", // Busan Bison
     "d6a352fc-b675-40a0-864d-f4fd50aaeea0", // Canada Artists
@@ -72,6 +73,7 @@ export const libraryTeamIds = [
     "55c9fee3-79c8-4467-8dfb-ff1e340aae8c", // Dallas Cows
     "71c621eb-85dc-4bd7-a690-0c68c0e6fb90", // Downward Dogs
     "74966fbd-5d77-48b1-8075-9bf197583775", // Florence Rhinoceroses
+    "4c192065-65d8-4010-8145-395f82d24ddf", // Green Hill Hedgehogs
     "b6b5df8f-5602-4883-b47d-07e77ed9d5af", // Laredo Excavators
     "00245773-6f25-43b1-a863-42b4068888f0", // La Paz Llamas
     "26f947db-4e2a-41a5-896c-02cf8eb47af0", // Lisbon Lynx
@@ -83,13 +85,12 @@ export const libraryTeamIds = [
     "53d473fb-ffee-4fd3-aa1c-671228adc592", // New Hampshire Eggplants
     "cbd44c06-231a-4d1a-bb7d-4170b06e566a", // Oklahoma Heartthrobs
     "1a51664e-efec-45fa-b0ba-06d04c344628", // Oregon Psychics
+    "8e50d878-3dcd-4c27-9f1c-8d8f20f17077", // Portland Otters
     "258f6389-aac1-43d2-b30a-4b4dde90d5eb", // Kola Boar
     "a4b23784-0132-4813-b300-f7449cb06493", // Phoenix Trunks
     "774762ee-c234-4c57-90a1-e1e69db3f6a7", // Sao Paulo Parrots
     "4cd14d96-f817-41a3-af6c-2d3ed0dd20b7", // San Diego Saltines
     "3543229a-668c-4ac9-b64a-588422481f12", // Wyoming Dolphins
-    "cfd20759-5f9c-4596-9493-2669b6daf396", // [??A]
-    "4c192065-65d8-4010-8145-395f82d24ddf", // [??B]
 ];
 
 export function sortTeams(teams: BlaseballTeam[]): BlaseballTeam[] {
