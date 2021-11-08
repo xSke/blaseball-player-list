@@ -161,6 +161,8 @@ const bloodTypes = [
     "Fire",
     "Psychic",
     "Grass",
+    "Ball",
+    "Strike"
 ];
 
 const coffeeStyles = [
@@ -171,7 +173,7 @@ const coffeeStyles = [
     "Cold Brew",
     "Flat White",
     "Americano",
-    "Coffee?",
+    "Espresso",
     "Heavy Foam",
     "Latte",
     "Decaf",
