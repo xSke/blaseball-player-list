@@ -39,7 +39,7 @@ function SingleTeamFilter() {
     if (!data) return null;
 
     const selectedTeam = Object.values(data.teams).find(
-        (t) => t.shorthand === abbr
+        (t) => t.shorthand === abbr || t.id === abbr
     );
 
     return (
@@ -54,7 +54,7 @@ function SingleTeamFilter() {
                     teams={selectedTeam ? [selectedTeam.id] : []}
                     setTeams={(newTeams) => {
                         const newSelected = data.teams[newTeams[0]];
-                        history.push(`/team/${newSelected.shorthand}`);
+                        history.push(`/team/${newSelected.id}`);
                     }}
                 />
             </div>

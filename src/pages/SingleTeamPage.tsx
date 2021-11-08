@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router";
 import { PlayerTable } from "../components/table/PlayerTable";
 import { useLeagueData } from "../api/fetchhooks";
@@ -8,7 +7,7 @@ function SingleTeamPage(): JSX.Element {
     const data = useLeagueData();
     if (data === null) return <div>Loading</div>;
 
-    const team = Object.values(data.teams).find((t) => t.shorthand === abbr);
+    const team = Object.values(data.teams).find((t) => t.shorthand === abbr || t.id === abbr);
     if (team == null) return <div>Team not found</div>;
 
     return (

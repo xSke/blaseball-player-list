@@ -63,7 +63,7 @@ export function TeamSelect(props: {
             id={props.id}
             options={options}
             value={props.teams.map((id) => data.teams[id])}
-            getOptionValue={(team) => getTeamName(team).fullName}
+            getOptionValue={(team) => `${getTeamName(team).fullName} ${team.id}`}
             formatOptionLabel={formatOptionLabel}
             onChange={(value) => {
                 // depends whether multi flag is set
