@@ -42,15 +42,18 @@ export async function fetchLeagueData(at: string | null): Promise<LeagueData> {
     };
 }
 
+interface ModList {
+    collection: PlayerMod[]
+}
+
 async function fetchPlayersAndMods(
     at: string | null
 ): Promise<[ChroniclerEntity<BlaseballPlayer>[], PlayerMod[]]> {
     const players = await fetchEntities<BlaseballPlayer>("player", at);
     const modIds = getAllModIds(players);
-    const mods = await fetchJson<PlayerMod[]>(
-        "https://api.sibr.dev/proxy/database/mods?ids=" + modIds.join(",")
-    );
-    return [players, mods];
+    // hope this supports cors
+    const mods = await fetchJson<ModList>("https://blaseball-configs.s3.us-west-2.amazonaws.com/attributes.json");
+    return [players, mods.collection];
 }
 
 async function fetchTeams(
