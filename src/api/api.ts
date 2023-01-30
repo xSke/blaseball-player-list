@@ -50,7 +50,6 @@ async function fetchPlayersAndMods(
     at: string | null
 ): Promise<[ChroniclerEntity<BlaseballPlayer>[], PlayerMod[]]> {
     const players = await fetchEntities<BlaseballPlayer>("player", at);
-    const _ = getAllModIds(players);
     // hope this supports cors
     const mods = await fetchJson<ModList>("https://blaseball-configs.s3.us-west-2.amazonaws.com/attributes.json");
     return [players, mods.collection];
